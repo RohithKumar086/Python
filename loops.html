@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>Python Loops & Iteration — PyDSA</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="style.css"/>
+</head>
+<body>
+<nav class="navbar"><div class="nav-inner">
+  <a href="index.html" class="nav-brand"><span class="icon">⟨/⟩</span><span>PyDSA</span></a>
+  <ul class="nav-links" id="nav-links">
+    <li><a href="basics.html">Basics</a></li><li><a href="loops.html" class="active">Loops</a></li><li><a href="strings.html">Strings</a></li>
+    <li><a href="lists.html">Lists</a></li><li><a href="dictionaries.html">Dicts</a></li>
+    <li><a href="stacks-queues.html">Stacks</a></li><li><a href="linked-lists.html">LinkedList</a></li>
+    <li><a href="trees.html">Trees</a></li><li><a href="sorting.html">Sorting</a></li>
+    <li><a href="recursion.html">Recursion</a></li>
+  </ul>
+  <button class="nav-toggle" id="nav-toggle" aria-label="Menu"><span></span><span></span><span></span></button>
+</div></nav>
+
+<header class="page-hero">
+  <span class="emoji">🔁</span>
+  <h1>Python Loops & Iteration Deep-Dive</h1>
+  <p>Master <code>for</code> loops, <code>while</code> loops, control flow, helper functions (<code>range</code>, <code>enumerate</code>, <code>zip</code>), nested iteration, trace execution tables, and every loop operation for DSA.</p>
+</header>
+<div class="breadcrumb"><a href="index.html">Home</a><span>›</span>Loops & Iteration</div>
+<main class="content">
+
+<!-- ════ WHEN TO USE & QUESTIONS SOLVED ════ -->
+<div class="topic-card" style="border-left:4px solid var(--accent)">
+  <span class="section-label">Interview Applications</span>
+  <h2>🎯 What Problems Are Solved Using Loops?</h2>
+  <p>Loops are the engine behind almost every algorithm. Here is a breakdown of common DSA problem classes solved using loops:</p>
+  
+  <div class="table-wrap"><table>
+    <thead><tr><th>Loop Pattern</th><th>When to Use</th><th>Top LeetCode / Interview Questions</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Single Pointer Loop</strong></td><td>Linear scan, accumulation, min/max finding, filtering</td><td>FizzBuzz (#412), Single Number (#136), Find Peak Element (#162)</td></tr>
+      <tr><td><strong>Two-Pointer Loop</strong></td><td>Searching in sorted arrays, palindrome checking, reversing</td><td>Two Sum II (#167), Container With Most Water (#11), Trapping Rain Water (#42)</td></tr>
+      <tr><td><strong>Fast & Slow Pointer Loop</strong></td><td>Cycle detection in linked lists, happy number check</td><td>Linked List Cycle (#141), Happy Number (#202)</td></tr>
+      <tr><td><strong>Sliding Window Loop</strong></td><td>Contiguous subarray sums, longest substring conditions</td><td>Longest Substring Without Repeats (#3), Minimum Size Subarray Sum (#209)</td></tr>
+      <tr><td><strong>Nested Loops (2D Grid)</strong></td><td>Matrix traversal, grid search, image rotation</td><td>Number of Islands (#200), Spiral Matrix (#54), Rotate Image (#48)</td></tr>
+      <tr><td><strong>Sentinel <code>while True</code> Loop</strong></td><td>User input validation, streaming data, game loops, menu interfaces</td><td>Valid Sudoku (#36), Read N Characters Given Read4 (#157)</td></tr>
+    </tbody>
+  </table></div>
+</div>
+
+<!-- ════ WHILE LOOPS IN DETAIL ════ -->
+<div class="topic-card">
+  <span class="section-label">Core Loop Construct 1</span>
+  <h2>🔄 1. The <code>while</code> Loop — Condition-Based Iteration</h2>
+  <p>A <code>while</code> loop repeatedly executes a block of code <strong>as long as its boolean condition evaluates to <code>True</code></strong>. Use a <code>while</code> loop when you <strong>do not know in advance how many iterations</strong> will be needed.</p>
+
+  <h3>Anatomy of a <code>while</code> Loop</h3>
+  <div class="code-block"><div class="code-header"><div class="code-dots"><span></span><span></span><span></span></div><span class="code-filename">while_anatomy.py</span><button class="code-copy">Copy</button></div>
+<pre><code><span class="cm"># 1. INITIALIZATION: set initial counter or state</span>
+<span class="fn">count</span> = <span class="nu">1</span>
+
+<span class="cm"># 2. CONDITION: evaluated BEFORE every iteration</span>
+<span class="kw">while</span> count <= <span class="nu">5</span>:
+    <span class="bi">print</span>(<span class="st">f"Count is: {count}"</span>)
+    <span class="cm"># 3. UPDATE / INCREMENT: modify state toward termination</span>
+    count += <span class="nu">1</span>
+
+<span class="cm"># Output:</span>
+<span class="cm"># Count is: 1</span>
+<span class="cm"># Count is: 2</span>
+<span class="cm"># Count is: 3</span>
+<span class="cm"># Count is: 4</span>
+<span class="cm"># Count is: 5</span></code></pre></div>
+
+  <div class="info-box info-warn">
+    <span class="icon">⚠️</span>
+    <p><strong>Infinite Loop Hazard:</strong> If you forget to update the condition variable inside the loop body (e.g. forgetting <code>count += 1</code>), the loop will run forever until interrupted!</p>
+  </div>
+
+  <h3>Common <code>while</code> Loop Patterns</h3>
+  <div class="code-block"><div class="code-header"><div class="code-dots"><span></span><span></span><span></span></div><span class="code-filename">while_patterns.py</span><button class="code-copy">Copy</button></div>
+<pre><code><span class="cm"># ─── Pattern 1: Sentinel Loop (Infinite Loop with break) ───</span>
+<span class="kw">while</span> <span class="nu">True</span>:
+    <span class="fn">user_input</span> = <span class="bi">input</span>(<span class="st">"Enter positive number (or 'exit' to quit): "</span>)
+    <span class="kw">if</span> user_input.lower() == <span class="st">"exit"</span>:
+        <span class="bi">print</span>(<span class="st">"Exiting loop!"</span>)
+        <span class="kw">break</span>  <span class="cm"># Exit immediately</span>
+    <span class="kw">if</span> <span class="kw">not</span> user_input.isdigit():
+        <span class="bi">print</span>(<span class="st">"Invalid input! Try again."</span>)
+        <span class="kw">continue</span>  <span class="cm"># Skip remaining body, prompt again</span>
+    <span class="bi">print</span>(<span class="st">f"Square: {int(user_input)**2}"</span>)
+
+<span class="cm"># ─── Pattern 2: Digits Extraction (Mathematical while loop) ───</span>
+<span class="fn">num</span> = <span class="nu">12345</span>
+<span class="fn">digit_sum</span> = <span class="nu">0</span>
+<span class="kw">while</span> num > <span class="nu">0</span>:
+    <span class="fn">digit</span> = num % <span class="nu">10</span>        <span class="cm"># extract last digit</span>
+    digit_sum += digit
+    num = num // <span class="nu">10</span>          <span class="cm"># remove last digit</span>
+<span class="bi">print</span>(<span class="st">f"Sum of digits: {digit_sum}"</span>)  <span class="cm"># 15</span>
+
+<span class="cm"># ─── Pattern 3: while...else Construct ───</span>
+<span class="cm"># The 'else' block runs ONLY if the loop finishes naturally (WITHOUT hitting 'break')</span>
+<span class="fn">attempts</span> = <span class="nu">0</span>
+<span class="kw">while</span> attempts <span class="nu">&lt; 3</span>:
+    <span class="fn">pwd</span> = <span class="st">"secret"</span>  <span class="cm"># simulated input</span>
+    <span class="kw">if</span> pwd == <span class="st">"secret"</span>:
+        <span class="bi">print</span>(<span class="st">"Access Granted!"</span>)
+        <span class="kw">break</span>
+    attempts += <span class="nu">1</span>
+<span class="kw">else</span>:
+    <span class="bi">print</span>(<span class="st">"Account Locked! 3 failed attempts."</span>)</code></pre></div>
+</div>
+
+<!-- ════ FOR LOOPS IN DETAIL ════ -->
+<div class="topic-card">
+  <span class="section-label">Core Loop Construct 2</span>
+  <h2>🔁 2. The <code>for</code> Loop — Sequence & Iterable Iteration</h2>
+  <p>Unlike languages like C/Java where <code>for</code> loops are index-based, Python <code>for</code> loops are <strong>iterator-based</strong>. They iterate over elements of any <strong>iterable</strong> (lists, strings, tuples, dictionaries, sets, ranges, generators).</p>
+
+  <h3>How Python <code>for</code> Loops Work Under the Hood</h3>
+  <p>When you write <code>for x in iterable:</code>, Python automatically calls <code>iter(iterable)</code> to get an iterator object, and repeatedly calls <code>next()</code> until a <code>StopIteration</code> exception is raised.</p>
+
+  <div class="code-block"><div class="code-header"><div class="code-dots"><span></span><span></span><span></span></div><span class="code-filename">under_the_hood.py</span><button class="code-copy">Copy</button></div>
+<pre><code><span class="fn">nums</span> = [<span class="nu">10</span>, <span class="nu">20</span>, <span class="nu">30</span>]
+
+<span class="cm"># What 'for x in nums' actually does:</span>
+<span class="fn">iterator</span> = <span class="bi">iter</span>(nums)
+<span class="kw">while</span> <span class="nu">True</span>:
+    <span class="kw">try</span>:
+        <span class="fn">item</span> = <span class="bi">next</span>(iterator)
+        <span class="bi">print</span>(item)
+    <span class="kw">except</span> <span class="bi">StopIteration</span>:
+        <span class="kw">break</span>  <span class="cm"># Clean exit when sequence ends</span></code></pre></div>
+
+  <h3>Mastering the <code>range()</code> Function</h3>
+  <p><code>range()</code> generates an immutable sequence of numbers on-demand (O(1) memory space!).</p>
+
+  <div class="table-wrap"><table>
+    <thead><tr><th>Syntax</th><th>Example</th><th>Generated Sequence</th><th>Description</th></tr></thead>
+    <tbody>
+      <tr><td><code>range(stop)</code></td><td><code>range(5)</code></td><td><code>0, 1, 2, 3, 4</code></td><td>Starts at 0, stops before <code>stop</code></td></tr>
+      <tr><td><code>range(start, stop)</code></td><td><code>range(2, 6)</code></td><td><code>2, 3, 4, 5</code></td><td>Starts at <code>start</code>, stops before <code>stop</code></td></tr>
+      <tr><td><code>range(start, stop, step)</code></td><td><code>range(1, 10, 2)</code></td><td><code>1, 3, 5, 7, 9</code></td><td>Increments by <code>step</code></td></tr>
+      <tr><td><code>range(start, stop, -step)</code></td><td><code>range(5, 0, -1)</code></td><td><code>5, 4, 3, 2, 1</code></td><td><strong>Reverse range</strong> (counts down)</td></tr>
+    </tbody>
+  </table></div>
+
+  <div class="code-block"><div class="code-header"><div class="code-dots"><span></span><span></span><span></span></div><span class="code-filename">range_examples.py</span><button class="code-copy">Copy</button></div>
+<pre><code><span class="cm"># Forward range</span>
+<span class="kw">for</span> i <span class="kw">in</span> <span class="bi">range</span>(<span class="nu">5</span>):
+    <span class="bi">print</span>(i, end=<span class="st">" "</span>)  <span class="cm"># 0 1 2 3 4</span>
+<span class="bi">print</span>()
+
+<span class="cm"># Step range</span>
+<span class="kw">for</span> i <span class="kw">in</span> <span class="bi">range</span>(<span class="nu">0</span>, <span class="nu">10</span>, <span class="nu">2</span>):
+    <span class="bi">print</span>(i, end=<span class="st">" "</span>)  <span class="cm"># 0 2 4 6 8</span>
+<span class="bi">print</span>()
+
+<span class="cm"># Reverse range (very useful for backwards array iteration in DSA!)</span>
+<span class="kw">for</span> i <span class="kw">in</span> <span class="bi">range</span>(<span class="nu">5</span>, <span class="nu">0</span>, -<span class="nu">1</span>):
+    <span class="bi">print</span>(i, end=<span class="st">" "</span>)  <span class="cm"># 5 4 3 2 1</span>
+<span class="bi">print</span>()</code></pre></div>
+</div>
+
+<!-- ════ ITERATING OVER DIFFERENT DATA STRUCTURES ════ -->
+<div class="topic-card">
+  <span class="section-label">Comprehensive Operations</span>
+  <h2>📦 3. Iterating Over Every Python Collection</h2>
+
+  <div class="code-block"><div class="code-header"><div class="code-dots"><span></span><span></span><span></span></div><span class="code-filename">collection_iteration.py</span><button class="code-copy">Copy</button></div>
+<pre><code><span class="cm"># 1. String Iteration</span>
+<span class="kw">for</span> char <span class="kw">in</span> <span class="st">"PYTHON"</span>:
+    <span class="bi">print</span>(char, end=<span class="st">"•"</span>)  <span class="cm"># P•Y•T•H•O•N•</span>
+<span class="bi">print</span>()
+
+<span class="cm"># 2. List / Tuple Iteration</span>
+<span class="fn">fruits</span> = [<span class="st">"apple"</span>, <span class="st">"banana"</span>, <span class="st">"cherry"</span>]
+<span class="kw">for</span> fruit <span class="kw">in</span> fruits:
+    <span class="bi">print</span>(fruit)
+
+<span class="cm"># 3. Dictionary Iteration (Keys, Values, Items)</span>
+<span class="fn">scores</span> = {<span class="st">"Alice"</span>: <span class="nu">95</span>, <span class="st">"Bob"</span>: <span class="nu">88</span>, <span class="st">"Charlie"</span>: <span class="nu">92</span>}
+
+<span class="kw">for</span> name <span class="kw">in</span> scores:                  <span class="cm"># Iterates over KEYS</span>
+    <span class="bi">print</span>(<span class="st">f"Key: {name}"</span>)
+
+<span class="kw">for</span> score <span class="kw">in</span> scores.values():        <span class="cm"># Iterates over VALUES</span>
+    <span class="bi">print</span>(<span class="st">f"Value: {score}"</span>)
+
+<span class="kw">for</span> name, score <span class="kw">in</span> scores.items():   <span class="cm"># Iterates over KEY-VALUE PAIRS</span>
+    <span class="bi">print</span>(<span class="st">f"{name} scored {score}"</span>)
+
+<span class="cm"># 4. Set Iteration (Unordered!)</span>
+<span class="fn">unique_tags</span> = {<span class="st">"python"</span>, <span class="st">"dsa"</span>, <span class="st">"algorithms"</span>}
+<span class="kw">for</span> tag <span class="kw">in</span> unique_tags:
+    <span class="bi">print</span>(tag)</code></pre></div>
+</div>
+
+<!-- ════ ESSENTIAL LOOP HELPER FUNCTIONS ════ -->
+<div class="topic-card">
+  <span class="section-label">Super Powers</span>
+  <h2>⚡ 4. Advanced Iteration Helpers: <code>enumerate</code>, <code>zip</code>, <code>reversed</code>, <code>sorted</code></h2>
+
+  <h3>A. <code>enumerate(iterable, start=0)</code></h3>
+  <p>Generates index and value simultaneously — eliminates the need for manual counter variables like <code>i = 0</code>!</p>
+  <div class="code-block"><div class="code-header"><div class="code-dots"><span></span><span></span><span></span></div><span class="code-filename">enumerate_demo.py</span><button class="code-copy">Copy</button></div>
+<pre><code><span class="fn">colors</span> = [<span class="st">"red"</span>, <span class="st">"green"</span>, <span class="st">"blue"</span>]
+
+<span class="cm"># Default start=0</span>
+<span class="kw">for</span> idx, color <span class="kw">in</span> <span class="bi">enumerate</span>(colors):
+    <span class="bi">print</span>(<span class="st">f"Index {idx}: {color}"</span>)
+<span class="cm"># Index 0: red</span>
+<span class="cm"># Index 1: green</span>
+<span class="cm"># Index 2: blue</span>
+
+<span class="cm"># Custom start=1 (1-based ranking)</span>
+<span class="kw">for</span> rank, color <span class="kw">in</span> <span class="bi">enumerate</span>(colors, start=<span class="nu">1</span>):
+    <span class="bi">print</span>(<span class="st">f"Rank #{rank}: {color}"</span>)</code></pre></div>
+
+  <h3>B. <code>zip(*iterables)</code></h3>
+  <p>Pairs up elements from two or more sequences in parallel. Stops when the shortest sequence is exhausted.</p>
+  <div class="code-block"><div class="code-header"><div class="code-dots"><span></span><span></span><span></span></div><span class="code-filename">zip_demo.py</span><button class="code-copy">Copy</button></div>
+<pre><code><span class="fn">names</span> = [<span class="st">"Alice"</span>, <span class="st">"Bob"</span>, <span class="st">"Charlie"</span>]
+<span class="fn">ages</span> = [<span class="nu">25</span>, <span class="nu">30</span>, <span class="nu">35</span>]
+<span class="fn">cities</span> = [<span class="st">"NY"</span>, <span class="st">"LA"</span>, <span class="st">"Chicago"</span>]
+
+<span class="kw">for</span> name, age, city <span class="kw">in</span> <span class="bi">zip</span>(names, ages, cities):
+    <span class="bi">print</span>(<span class="st">f"{name} ({age}) lives in {city}"</span>)
+
+<span class="cm"># Unzipping a list of tuples back into separate lists!</span>
+<span class="fn">pairs</span> = [(<span class="nu">1</span>, <span class="st">'a'</span>), (<span class="nu">2</span>, <span class="st">'b'</span>), (<span class="nu">3</span>, <span class="st">'c'</span>)]
+<span class="fn">nums</span>, <span class="fn">letters</span> = <span class="bi">zip</span>(*pairs)
+<span class="bi">print</span>(nums)     <span class="cm"># (1, 2, 3)</span>
+<span class="bi">print</span>(letters)  <span class="cm"># ('a', 'b', 'c')</span></code></pre></div>
+
+  <h3>C. <code>reversed()</code> and <code>sorted()</code> Iteration</h3>
+  <div class="code-block"><div class="code-header"><div class="code-dots"><span></span><span></span><span></span></div><span class="code-filename">reversed_sorted.py</span><button class="code-copy">Copy</button></div>
+<pre><code><span class="fn">numbers</span> = [<span class="nu">4</span>, <span class="nu">1</span>, <span class="nu">7</span>, <span class="nu">2</span>, <span class="nu">9</span>]
+
+<span class="cm"># Iterate in reverse without mutating original list</span>
+<span class="kw">for</span> num <span class="kw">in</span> <span class="bi">reversed</span>(numbers):
+    <span class="bi">print</span>(num, end=<span class="st">" "</span>)  <span class="cm"># 9 2 7 1 4</span>
+<span class="bi">print</span>()
+
+<span class="cm"># Iterate in sorted order without mutating original list</span>
+<span class="kw">for</span> num <span class="kw">in</span> <span class="bi">sorted</span>(numbers):
+    <span class="bi">print</span>(num, end=<span class="st">" "</span>)  <span class="cm"># 1 2 4 7 9</span>
+<span class="bi">print</span>()</code></pre></div>
+</div>
+
+<!-- ════ NESTED LOOPS & GRID TRAVERSAL ════ -->
+<div class="topic-card">
+  <span class="section-label">Multi-Dimensional Iteration</span>
+  <h2>🧱 5. Nested Loops & 2D Matrix Traversal</h2>
+  <p>A nested loop is a loop inside another loop. The inner loop executes completely for <strong>each single iteration</strong> of the outer loop.</p>
+
+  <div class="code-block"><div class="code-header"><div class="code-dots"><span></span><span></span><span></span></div><span class="code-filename">nested_loops.py</span><button class="code-copy">Copy</button></div>
+<pre><code><span class="cm"># 1. 2D Matrix Traversal (Rows and Columns)</span>
+<span class="fn">matrix</span> = [
+    [<span class="nu">10</span>, <span class="nu">20</span>, <span class="nu">30</span>],
+    [<span class="nu">40</span>, <span class="nu">50</span>, <span class="nu">60</span>],
+    [<span class="nu">70</span>, <span class="nu">80</span>, <span class="nu">90</span>]
+]
+
+<span class="fn">rows</span> = <span class="bi">len</span>(matrix)
+<span class="fn">cols</span> = <span class="bi">len</span>(matrix[<span class="nu">0</span>])
+
+<span class="kw">for</span> r <span class="kw">in</span> <span class="bi">range</span>(rows):
+    <span class="kw">for</span> c <span class="kw">in</span> <span class="bi">range</span>(cols):
+        <span class="bi">print</span>(<span class="st">f"matrix[{r}][{c}] = {matrix[r][c]}"</span>, end=<span class="st">"  "</span>)
+    <span class="bi">print</span>()  <span class="cm"># New line per row</span>
+
+<span class="cm"># 2. Pattern Printing — Right Triangle</span>
+<span class="kw">for</span> i <span class="kw">in</span> <span class="bi">range</span>(<span class="nu">1</span>, <span class="nu">6</span>):
+    <span class="kw">for</span> j <span class="kw">in</span> <span class="bi">range</span>(i):
+        <span class="bi">print</span>(<span class="st">"*"</span>, end=<span class="st">""</span>)
+    <span class="bi">print</span>()
+<span class="cm"># *</span>
+<span class="cm"># **</span>
+<span class="cm"># ***</span>
+<span class="cm"># ****</span>
+<span class="cm"># *****</span>
+
+<span class="cm"># 3. Breaking Out of Nested Loops (Using Flag or Function Return)</span>
+<span class="kw">def</span> <span class="fn">find_matrix_target</span>(grid, target):
+    <span class="kw">for</span> r, row <span class="kw">in</span> <span class="bi">enumerate</span>(grid):
+        <span class="kw">for</span> c, val <span class="kw">in</span> <span class="bi">enumerate</span>(row):
+            <span class="kw">if</span> val == target:
+                <span class="kw">return</span> (r, c)  <span class="cm"># Immediate exit from all nested loops!</span>
+    <span class="kw">return</span> (-<span class="nu">1</span>, -<span class="nu">1</span>)
+
+<span class="bi">print</span>(<span class="fn">find_matrix_target</span>(matrix, <span class="nu">50</span>))  <span class="cm"># (1, 1)</span></code></pre></div>
+</div>
+
+<!-- ════ ALL OPERATIONS PERFORMABLE WITH LOOPS ════ -->
+<div class="topic-card">
+  <span class="section-label">Comprehensive Operations Guide</span>
+  <h2>🛠️ 6. All Core Operations Performable Using Loops</h2>
+  <p>Here is a complete catalog of data manipulation patterns you can execute using loops:</p>
+
+  <div class="code-block"><div class="code-header"><div class="code-dots"><span></span><span></span><span></span></div><span class="code-filename">loop_operations_catalog.py</span><button class="code-copy">Copy</button></div>
+<pre><code><span class="fn">nums</span> = [<span class="nu">12</span>, <span class="nu">5</span>, <span class="nu">8</span>, <span class="nu">19</span>, <span class="nu">3</span>, <span class="nu">14</span>, <span class="nu">7</span>]
+
+<span class="cm"># ─── Operation 1: Accumulation (Sum / Product) ───</span>
+<span class="fn">total_sum</span> = <span class="nu">0</span>
+<span class="fn">total_product</span> = <span class="nu">1</span>
+<span class="kw">for</span> n <span class="kw">in</span> nums:
+    total_sum += n
+    total_product *= n
+
+<span class="cm"># ─── Operation 2: Linear Search & Extremes (Min / Max) ───</span>
+<span class="fn">max_val</span> = nums[<span class="nu">0</span>]
+<span class="fn">min_val</span> = nums[<span class="nu">0</span>]
+<span class="kw">for</span> n <span class="kw">in</span> nums:
+    <span class="kw">if</span> n > max_val: max_val = n
+    <span class="kw">if</span> n < min_val: min_val = n
+
+<span class="cm"># ─── Operation 3: Filtering / Selection ───</span>
+<span class="fn">evens_only</span> = []
+<span class="kw">for</span> n <span class="kw">in</span> nums:
+    <span class="kw">if</span> n % <span class="nu">2</span> == <span class="nu">0</span>:
+        evens_only.append(n)
+
+<span class="cm"># ─── Operation 4: Counting Frequencies (Manual Hash Map) ───</span>
+<span class="fn">text</span> = <span class="st">"banana"</span>
+<span class="fn">counts</span> = {}
+<span class="kw">for</span> char <span class="kw">in</span> text:
+    <span class="kw">if</span> char <span class="kw">in</span> counts:
+        counts[char] += <span class="nu">1</span>
+    <span class="kw">else</span>:
+        counts[char] = <span class="nu">1</span>
+<span class="cm"># {'b': 1, 'a': 3, 'n': 2}</span>
+
+<span class="cm"># ─── Operation 5: In-Place Reversing with Two Pointers ───</span>
+<span class="fn">arr</span> = [<span class="nu">1</span>, <span class="nu">2</span>, <span class="nu">3</span>, <span class="nu">4</span>, <span class="nu">5</span>]
+<span class="fn">left</span>, <span class="fn">right</span> = <span class="nu">0</span>, <span class="bi">len</span>(arr) - <span class="nu">1</span>
+<span class="kw">while</span> left &lt; right:
+    arr[left], arr[right] = arr[right], arr[left]
+    left += <span class="nu">1</span>
+    right -= <span class="nu">1</span>
+<span class="bi">print</span>(<span class="st">"Reversed arr:"</span>, arr)  <span class="cm"># [5, 4, 3, 2, 1]</span>
+
+<span class="cm"># ─── Operation 6: Flattening a 2D Matrix to 1D ───</span>
+<span class="fn">grid</span> = [[<span class="nu">1</span>, <span class="nu">2</span>], [<span class="nu">3</span>, <span class="nu">4</span>], [<span class="nu">5</span>, <span class="nu">6</span>]]
+<span class="fn">flat</span> = []
+<span class="kw">for</span> row <span class="kw">in</span> grid:
+    <span class="kw">for</span> val <span class="kw">in</span> row:
+        flat.append(val)
+<span class="bi">print</span>(<span class="st">"Flat list:"</span>, flat)  <span class="cm"># [1, 2, 3, 4, 5, 6]</span>
+
+<span class="cm"># ─── Operation 7: Deduplication (Maintaining Order) ───</span>
+<span class="fn">dupes</span> = [<span class="nu">4</span>, <span class="nu">2</span>, <span class="nu">4</span>, <span class="nu">1</span>, <span class="nu">2</span>, <span class="nu">5</span>]
+<span class="fn">unique_list</span> = []
+<span class="fn">seen</span> = <span class="bi">set</span>()
+<span class="kw">for</span> item <span class="kw">in</span> dupes:
+    <span class="kw">if</span> item <span class="kw">not in</span> seen:
+        seen.add(item)
+        unique_list.append(item)
+<span class="bi">print</span>(<span class="st">"Unique list:"</span>, unique_list)  <span class="cm"># [4, 2, 1, 5]</span></code></pre></div>
+</div>
+
+<!-- ════ STEP-BY-STEP EXECUTION TRACE ════ -->
+<div class="topic-card">
+  <span class="section-label">Detailed Execution Trace</span>
+  <h2>🔍 Step-by-Step Execution Trace Tables</h2>
+
+  <h3>Trace 1: Reversing Array <code>[10, 20, 30, 40, 50]</code> with Two Pointers</h3>
+
+  <div class="table-wrap"><table>
+    <thead><tr><th>Iteration</th><th>Left Index (val)</th><th>Right Index (val)</th><th>Action Taken</th><th>Array State After Step</th><th>Condition (left < right)</th></tr></thead>
+    <tbody>
+      <tr><td>1</td><td>0 (<code>10</code>)</td><td>4 (<code>50</code>)</td><td>Swap <code>arr[0]</code> & <code>arr[4]</code></td><td><code>[50, 20, 30, 40, 10]</code></td><td>0 < 4 ✅ Continue</td></tr>
+      <tr><td>2</td><td>1 (<code>20</code>)</td><td>3 (<code>40</code>)</td><td>Swap <code>arr[1]</code> & <code>arr[3]</code></td><td><code>[50, 40, 30, 20, 10]</code></td><td>1 < 3 ✅ Continue</td></tr>
+      <tr><td>3</td><td>2 (<code>30</code>)</td><td>2 (<code>30</code>)</td><td>Pointers met at index 2</td><td><code>[50, 40, 30, 20, 10]</code></td><td>2 < 2 ❌ <strong>Loop Ends!</strong></td></tr>
+    </tbody>
+  </table></div>
+
+  <h3>Trace 2: <code>for...else</code> Prime Number Checker for <code>n = 7</code></h3>
+
+  <div class="table-wrap"><table>
+    <thead><tr><th>Loop i</th><th>Check (n % i == 0)</th><th>Is Divisible?</th><th>Action</th><th>Else Block State</th></tr></thead>
+    <tbody>
+      <tr><td>2</td><td>7 % 2 == 1</td><td>False</td><td>Continue to i=3</td><td>Waiting...</td></tr>
+      <tr><td>3</td><td>7 % 3 == 1</td><td>False</td><td>Continue to i=4</td><td>Waiting...</td></tr>
+      <tr><td>4 (range end)</td><td>-</td><td>-</td><td>Loop completed naturally</td><td><strong><code>else:</code> block executes! → "7 is Prime"</strong></td></tr>
+    </tbody>
+  </table></div>
+</div>
+
+<!-- ════ DSA CODE SOLUTIONS USING LOOPS ════ -->
+<div class="topic-card">
+  <span class="section-label">Code Solutions</span>
+  <h2>💻 Complete Working Solutions with Loops</h2>
+
+  <h3>1. FizzBuzz (LeetCode #412)</h3>
+  <div class="code-block"><div class="code-header"><div class="code-dots"><span></span><span></span><span></span></div><span class="code-filename">fizzbuzz.py</span><button class="code-copy">Copy</button></div>
+<pre><code><span class="kw">def</span> <span class="fn">fizz_buzz</span>(n: <span class="bi">int</span>) -> <span class="bi">list</span>:
+    <span class="fn">result</span> = []
+    <span class="kw">for</span> i <span class="kw">in</span> <span class="bi">range</span>(<span class="nu">1</span>, n + <span class="nu">1</span>):
+        <span class="kw">if</span> i % <span class="nu">3</span> == <span class="nu">0</span> <span class="kw">and</span> i % <span class="nu">5</span> == <span class="nu">0</span>:
+            result.append(<span class="st">"FizzBuzz"</span>)
+        <span class="kw">elif</span> i % <span class="nu">3</span> == <span class="nu">0</span>:
+            result.append(<span class="st">"Fizz"</span>)
+        <span class="kw">elif</span> i % <span class="nu">5</span> == <span class="nu">0</span>:
+            result.append(<span class="st">"Buzz"</span>)
+        <span class="kw">else</span>:
+            result.append(<span class="bi">str</span>(i))
+    <span class="kw">return</span> result
+
+<span class="bi">print</span>(<span class="fn">fizz_buzz</span>(<span class="nu">15</span>))</code></pre></div>
+
+  <h3>2. Move Zeroes to End (LeetCode #283)</h3>
+  <div class="code-block"><div class="code-header"><div class="code-dots"><span></span><span></span><span></span></div><span class="code-filename">move_zeroes.py</span><button class="code-copy">Copy</button></div>
+<pre><code><span class="kw">def</span> <span class="fn">move_zeroes</span>(nums: <span class="bi">list</span>) -> <span class="nu">None</span>:
+    <span class="fn">last_non_zero</span> = <span class="nu">0</span>
+    <span class="kw">for</span> i <span class="kw">in</span> <span class="bi">range</span>(<span class="bi">len</span>(nums)):
+        <span class="kw">if</span> nums[i] != <span class="nu">0</span>:
+            nums[last_non_zero], nums[i] = nums[i], nums[last_non_zero]
+            last_non_zero += <span class="nu">1</span>
+
+<span class="fn">arr</span> = [<span class="nu">0</span>, <span class="nu">1</span>, <span class="nu">0</span>, <span class="nu">3</span>, <span class="nu">12</span>]
+<span class="fn">move_zeroes</span>(arr)
+<span class="bi">print</span>(<span class="st">"Moved zeroes:"</span>, arr)  <span class="cm"># [1, 3, 12, 0, 0]</span></code></pre></div>
+</div>
+
+<div class="page-nav">
+  <a href="basics.html"><span class="nav-label">← Previous</span><span class="nav-title">Python Basics</span></a>
+  <a href="strings.html" class="next"><span class="nav-label">Next →</span><span class="nav-title">Strings</span></a>
+</div>
+</main>
+<button id="btt" aria-label="Back to top">↑</button>
+<script src="script.js"></script>
+</body>
+</html>
