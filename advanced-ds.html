@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>Advanced Data Structures (Trie & Union-Find) — PyDSA</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="style.css"/>
+</head>
+<body>
+<nav class="navbar"><div class="nav-inner">
+  <a href="index.html" class="nav-brand"><span class="icon">⟨/⟩</span><span>PyDSA</span></a>
+  <ul class="nav-links" id="nav-links">
+    <li><a href="basics.html">Basics</a></li><li><a href="loops.html">Loops</a></li><li><a href="strings.html">Strings</a></li>
+    <li><a href="lists.html">Lists</a></li><li><a href="dictionaries.html">Dicts</a></li>
+    <li><a href="trees.html">Trees</a></li><li><a href="graphs.html">Graphs</a></li>
+    <li><a href="dp.html">DP</a></li><li><a href="advanced-ds.html" class="active">Advanced DS</a></li>
+  </ul>
+  <button class="nav-toggle" id="nav-toggle" aria-label="Menu"><span></span><span></span><span></span></button>
+</div></nav>
+
+<header class="page-hero">
+  <span class="emoji">🚀</span>
+  <h1>Advanced Data Structures</h1>
+  <p>Trie (Prefix Tree) and Disjoint Set Union (DSU / Union-Find) — essential structures for hard interview problems.</p>
+</header>
+<div class="breadcrumb"><a href="index.html">Home</a><span>›</span>Advanced DS</div>
+<main class="content">
+
+<!-- ════ WHEN TO USE & QUESTIONS SOLVED ════ -->
+<div class="topic-card" style="border-left:4px solid var(--accent)">
+  <span class="section-label">Interview Applications</span>
+  <h2>🎯 What Problems Are Solved Using Advanced DS?</h2>
+  
+  <div class="table-wrap"><table>
+    <thead><tr><th>Structure</th><th>Key Indicator</th><th>Top LeetCode / Interview Questions</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Trie (Prefix Tree)</strong></td><td>Prefix matching, autocomplete, dictionary search</td><td>Implement Trie (#208), Word Search II (#212), Design Add/Search Words (#211)</td></tr>
+      <tr><td><strong>Union-Find (DSU)</strong></td><td>Dynamic connectivity, connected components, cycle in undirected graph</td><td>Number of Connected Components (#323), Redundant Connection (#684), Accounts Merge (#721)</td></tr>
+    </tbody>
+  </table></div>
+</div>
+
+<!-- ════ TRIE (PREFIX TREE) ════ -->
+<div class="topic-card">
+  <span class="section-label">Structure 1</span>
+  <h2>🌲 Trie (Prefix Tree)</h2>
+  <p>A tree-like structure used to efficiently store and search strings. Searching for a prefix of length <code>L</code> takes <code>O(L)</code> time regardless of how many words are in the dictionary!</p>
+
+  <div class="code-block"><div class="code-header"><div class="code-dots"><span></span><span></span><span></span></div><span class="code-filename">trie.py</span><button class="code-copy">Copy</button></div>
+<pre><code><span class="kw">class</span> <span class="fn">TrieNode</span>:
+    <span class="kw">def</span> <span class="fn">__init__</span>(self):
+        self.children = {}  <span class="cm"># char → TrieNode</span>
+        self.is_end_of_word = <span class="nu">False</span>
+
+<span class="kw">class</span> <span class="fn">Trie</span>:
+    <span class="kw">def</span> <span class="fn">__init__</span>(self):
+        self.root = TrieNode()
+
+    <span class="cm"># Insert word into Trie — O(L)</span>
+    <span class="kw">def</span> <span class="fn">insert</span>(self, word: <span class="bi">str</span>) -> <span class="nu">None</span>:
+        <span class="fn">curr</span> = self.root
+        <span class="kw">for</span> char <span class="kw">in</span> word:
+            <span class="kw">if</span> char <span class="kw">not in</span> curr.children:
+                curr.children[char] = TrieNode()
+            curr = curr.children[char]
+        curr.is_end_of_word = <span class="nu">True</span>
+
+    <span class="cm"># Search exact word — O(L)</span>
+    <span class="kw">def</span> <span class="fn">search</span>(self, word: <span class="bi">str</span>) -> <span class="bi">bool</span>:
+        <span class="fn">curr</span> = self.root
+        <span class="kw">for</span> char <span class="kw">in</span> word:
+            <span class="kw">if</span> char <span class="kw">not in</span> curr.children:
+                <span class="kw">return</span> <span class="nu">False</span>
+            curr = curr.children[char]
+        <span class="kw">return</span> curr.is_end_of_word
+
+    <span class="cm"># Check if any word starts with prefix — O(L)</span>
+    <span class="kw">def</span> <span class="fn">starts_with</span>(self, prefix: <span class="bi">str</span>) -> <span class="bi">bool</span>:
+        <span class="fn">curr</span> = self.root
+        <span class="kw">for</span> char <span class="kw">in</span> prefix:
+            <span class="kw">if</span> char <span class="kw">not in</span> curr.children:
+                <span class="kw">return</span> <span class="nu">False</span>
+            curr = curr.children[char]
+        <span class="kw">return</span> <span class="nu">True</span>
+
+<span class="cm"># Usage</span>
+<span class="fn">trie</span> = Trie()
+trie.insert(<span class="st">"apple"</span>)
+<span class="bi">print</span>(trie.search(<span class="st">"apple"</span>))     <span class="cm"># True</span>
+<span class="bi">print</span>(trie.search(<span class="st">"app"</span>))       <span class="cm"># False</span>
+<span class="bi">print</span>(trie.starts_with(<span class="st">"app"</span>))  <span class="cm"># True</span></code></pre></div>
+</div>
+
+<!-- ════ DISJOINT SET UNION (DSU / UNION-FIND) ════ -->
+<div class="topic-card">
+  <span class="section-label">Structure 2</span>
+  <h2>🕸️ Disjoint Set Union (DSU / Union-Find)</h2>
+  <p>Tracks elements partitioned into disjoint (non-overlapping) sets. With <strong>Path Compression</strong> and <strong>Union by Rank</strong>, operations run in nearly <code>O(1)</code> amortized time (inverse Ackermann function <code>α(N)</code>)!</p>
+
+  <div class="code-block"><div class="code-header"><div class="code-dots"><span></span><span></span><span></span></div><span class="code-filename">dsu.py</span><button class="code-copy">Copy</button></div>
+<pre><code><span class="kw">class</span> <span class="fn">UnionFind</span>:
+    <span class="kw">def</span> <span class="fn">__init__</span>(self, n: <span class="bi">int</span>):
+        self.parent = <span class="bi">list</span>(<span class="bi">range</span>(n))  <span class="cm"># Each element is its own parent initially</span>
+        self.rank = [<span class="nu">1</span>] * n            <span class="cm"># Rank for union by rank</span>
+
+    <span class="cm"># Find with Path Compression — O(α(N)) ≈ O(1)</span>
+    <span class="kw">def</span> <span class="fn">find</span>(self, i: <span class="bi">int</span>) -> <span class="bi">int</span>:
+        <span class="kw">if</span> self.parent[i] != i:
+            self.parent[i] = self.find(self.parent[i])  <span class="cm"># Path compression!</span>
+        <span class="kw">return</span> self.parent[i]
+
+    <span class="cm"># Union by Rank — O(α(N)) ≈ O(1)</span>
+    <span class="kw">def</span> <span class="fn">union</span>(self, i: <span class="bi">int</span>, j: <span class="bi">int</span>) -> <span class="bi">bool</span>:
+        <span class="fn">root_i</span> = self.find(i)
+        <span class="fn">root_j</span> = self.find(j)
+
+        <span class="kw">if</span> root_i != root_j:
+            <span class="cm"># Attach smaller rank tree under higher rank tree</span>
+            <span class="kw">if</span> self.rank[root_i] > self.rank[root_j]:
+                self.parent[root_j] = root_i
+            <span class="kw">elif</span> self.rank[root_i] < self.rank[root_j]:
+                self.parent[root_i] = root_j
+            <span class="kw">else</span>:
+                self.parent[root_j] = root_i
+                self.rank[root_i] += <span class="nu">1</span>
+            <span class="kw">return</span> <span class="nu">True</span>  <span class="cm"># Union successful</span>
+        <span class="kw">return</span> <span class="nu">False</span>     <span class="cm"># Already in same set (Cycle detected!)</span>
+
+<span class="cm"># Usage — Detect cycle in undirected graph</span>
+<span class="fn">uf</span> = UnionFind(<span class="nu">4</span>)
+<span class="bi">print</span>(uf.union(<span class="nu">0</span>, <span class="nu">1</span>))  <span class="cm"># True</span>
+<span class="bi">print</span>(uf.union(<span class="nu">1</span>, <span class="nu">2</span>))  <span class="cm"># True</span>
+<span class="bi">print</span>(uf.union(<span class="nu">2</span>, <span class="nu">0</span>))  <span class="cm"># False → Cycle detected between 0 and 2!</span></code></pre></div>
+</div>
+
+<div class="page-nav">
+  <a href="bit-manipulation.html"><span class="nav-label">← Previous</span><span class="nav-title">Bit Manipulation</span></a>
+  <a href="roadmap.html" class="next"><span class="nav-label">Next →</span><span class="nav-title">DSA Roadmap</span></a>
+</div>
+</main>
+<button id="btt" aria-label="Back to top">↑</button>
+<script src="script.js"></script>
+</body>
+</html>

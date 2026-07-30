@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>Bit Manipulation — PyDSA</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="style.css"/>
+</head>
+<body>
+<nav class="navbar"><div class="nav-inner">
+  <a href="index.html" class="nav-brand"><span class="icon">⟨/⟩</span><span>PyDSA</span></a>
+  <ul class="nav-links" id="nav-links">
+    <li><a href="basics.html">Basics</a></li><li><a href="loops.html">Loops</a></li><li><a href="bit-manipulation.html" class="active">Bits</a></li>
+    <li><a href="strings.html">Strings</a></li><li><a href="lists.html">Lists</a></li><li><a href="dictionaries.html">Dicts</a></li>
+    <li><a href="stacks-queues.html">Stacks</a></li><li><a href="linked-lists.html">LinkedList</a></li>
+    <li><a href="trees.html">Trees</a></li><li><a href="sorting.html">Sorting</a></li>
+    <li><a href="dp.html">DP</a></li>
+  </ul>
+  <button class="nav-toggle" id="nav-toggle" aria-label="Menu"><span></span><span></span><span></span></button>
+</div></nav>
+
+<header class="page-hero">
+  <span class="emoji">⚡</span>
+  <h1>Bit Manipulation Mastery</h1>
+  <p>Bitwise operators, essential binary tricks, bitmasking, and ultra-fast O(1) space interview solutions.</p>
+</header>
+<div class="breadcrumb"><a href="index.html">Home</a><span>›</span>Bit Manipulation</div>
+<main class="content">
+
+<!-- ════ WHEN TO USE & QUESTIONS SOLVED ════ -->
+<div class="topic-card" style="border-left:4px solid var(--accent)">
+  <span class="section-label">Interview Applications</span>
+  <h2>🎯 What Problems Are Solved Using Bit Manipulation?</h2>
+  <p>Bit manipulation performs operations at the binary digit level — offering <code>O(1)</code> space and lightning-fast CPU performance.</p>
+  
+  <div class="table-wrap"><table>
+    <thead><tr><th>Bit Trick / Pattern</th><th>Operator Used</th><th>Top LeetCode / Interview Questions</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Find Non-Repeated Element</strong></td><td>XOR <code>^</code> (<code>x ^ x = 0</code>, <code>x ^ 0 = x</code>)</td><td>Single Number (#136), Single Number III (#260)</td></tr>
+      <tr><td><strong>Check Power of Two</strong></td><td><code>n & (n - 1) == 0</code></td><td>Power of Two (#231), Power of Four (#342)</td></tr>
+      <tr><td><strong>Count Set Bits (1s)</strong></td><td>Kernighan's Algorithm (<code>n = n & (n - 1)</code>)</td><td>Number of 1 Bits (#191), Counting Bits (#338)</td></tr>
+      <tr><td><strong>Bitmasking Subsets</strong></td><td>Shift <code>1 &lt;&lt; i</code> and AND <code>&</code></td><td>Subsets (#78), Pseudo-Palindromic Paths (#1457)</td></tr>
+      <tr><td><strong>Bit Reverse / Addition</strong></td><td>Bitwise shifts <code>&lt;&lt;</code>, <code>&gt;&gt;</code>, XOR <code>^</code>, AND <code>&</code></td><td>Reverse Bits (#190), Sum of Two Integers without + (#371)</td></tr>
+    </tbody>
+  </table></div>
+</div>
+
+<!-- ════ BITWISE OPERATORS ════ -->
+<div class="topic-card">
+  <span class="section-label">Operators</span>
+  <h2>🔢 Python Bitwise Operators</h2>
+
+  <div class="table-wrap"><table>
+    <thead><tr><th>Operator</th><th>Name</th><th>Binary Example (5 = 0101, 3 = 0011)</th><th>Result</th></tr></thead>
+    <tbody>
+      <tr><td><code>&</code></td><td>Bitwise AND</td><td><code>0101 & 0011</code> = <code>0001</code></td><td><code>1</code></td></tr>
+      <tr><td><code>|</code></td><td>Bitwise OR</td><td><code>0101 | 0011</code> = <code>0111</code></td><td><code>7</code></td></tr>
+      <tr><td><code>^</code></td><td>Bitwise XOR</td><td><code>0101 ^ 0011</code> = <code>0110</code></td><td><code>6</code> (Diff bits)</td></tr>
+      <tr><td><code>~</code></td><td>Bitwise NOT</td><td><code>~0101</code> = <code>-6</code></td><td>Inverts all bits</td></tr>
+      <tr><td><code>&lt;&lt;</code></td><td>Left Shift</td><td><code>0101 &lt;&lt; 1</code> = <code>1010</code></td><td><code>10</code> (Multiply by 2)</td></tr>
+      <tr><td><code>&gt;&gt;</code></td><td>Right Shift</td><td><code>0101 &gt;&gt; 1</code> = <code>0010</code></td><td><code>2</code> (Floor divide by 2)</td></tr>
+    </tbody>
+  </table></div>
+</div>
+
+<!-- ════ ESSENTIAL BIT TRICKS ════ -->
+<div class="topic-card">
+  <span class="section-label">Must-Know Tricks</span>
+  <h2>💡 8 Essential Bit Hacks for Interviews</h2>
+
+  <div class="code-block"><div class="code-header"><div class="code-dots"><span></span><span></span><span></span></div><span class="code-filename">bit_tricks.py</span><button class="code-copy">Copy</button></div>
+<pre><code><span class="cm"># 1. Check if number is odd or even</span>
+<span class="kw">def</span> <span class="fn">is_odd</span>(n: <span class="bi">int</span>) -> <span class="bi">bool</span>:
+    <span class="kw">return</span> (n & <span class="nu">1</span>) == <span class="nu">1</span>
+
+<span class="cm"># 2. Check if power of two</span>
+<span class="kw">def</span> <span class="fn">is_power_of_two</span>(n: <span class="bi">int</span>) -> <span class="bi">bool</span>:
+    <span class="kw">return</span> n > <span class="nu">0</span> <span class="kw">and</span> (n & (n - <span class="nu">1</span>)) == <span class="nu">0</span>
+
+<span class="cm"># 3. Count set bits (Kernighan's Algorithm) — O(k) where k = number of 1s</span>
+<span class="kw">def</span> <span class="fn">count_set_bits</span>(n: <span class="bi">int</span>) -> <span class="bi">int</span>:
+    <span class="fn">count</span> = <span class="nu">0</span>
+    <span class="kw">while</span> n > <span class="nu">0</span>:
+        n = n & (n - <span class="nu">1</span>)  <span class="cm"># Clears the lowest set bit!</span>
+        count += <span class="nu">1</span>
+    <span class="kw">return</span> count
+
+<span class="cm"># 4. Swap two numbers without extra variable</span>
+<span class="fn">a</span>, <span class="fn">b</span> = <span class="nu">5</span>, <span class="nu">9</span>
+a = a ^ b
+b = a ^ b
+a = a ^ b
+<span class="bi">print</span>(<span class="st">f"a={a}, b={b}"</span>)  <span class="cm"># a=9, b=5</span>
+
+<span class="cm"># 5. Get i-th bit of n</span>
+<span class="kw">def</span> <span class="fn">get_bit</span>(n: <span class="bi">int</span>, i: <span class="bi">int</span>) -> <span class="bi">int</span>:
+    <span class="kw">return</span> (n >> i) & <span class="nu">1</span>
+
+<span class="cm"># 6. Set i-th bit of n to 1</span>
+<span class="kw">def</span> <span class="fn">set_bit</span>(n: <span class="bi">int</span>, i: <span class="bi">int</span>) -> <span class="bi">int</span>:
+    <span class="kw">return</span> n | (<span class="nu">1</span> &lt;&lt; i)
+
+<span class="cm"># 7. Clear i-th bit of n to 0</span>
+<span class="kw">def</span> <span class="fn">clear_bit</span>(n: <span class="bi">int</span>, i: <span class="bi">int</span>) -> <span class="bi">int</span>:
+    <span class="kw">return</span> n & ~(<span class="nu">1</span> &lt;&lt; i)
+
+<span class="cm"># 8. Toggle i-th bit of n</span>
+<span class="kw">def</span> <span class="fn">toggle_bit</span>(n: <span class="bi">int</span>, i: <span class="bi">int</span>) -> <span class="bi">int</span>:
+    <span class="kw">return</span> n ^ (<span class="nu">1</span> &lt;&lt; i)</code></pre></div>
+</div>
+
+<!-- ════ CODE SOLUTIONS ════ -->
+<div class="topic-card">
+  <span class="section-label">Code Solutions</span>
+  <h2>💻 Complete Working Solutions</h2>
+
+  <h3>1. Single Number (LeetCode #136)</h3>
+  <p>Find the element that appears only once in an array where every other element appears twice. Solved in <code>O(N)</code> time and <code>O(1)</code> space using XOR!</p>
+
+  <div class="code-block"><div class="code-header"><div class="code-dots"><span></span><span></span><span></span></div><span class="code-filename">single_number.py</span><button class="code-copy">Copy</button></div>
+<pre><code><span class="kw">def</span> <span class="fn">single_number</span>(nums: <span class="bi">list</span>) -> <span class="bi">int</span>:
+    <span class="fn">res</span> = <span class="nu">0</span>
+    <span class="kw">for</span> n <span class="kw">in</span> nums:
+        res ^= n  <span class="cm"># Paired numbers cancel out to 0!</span>
+    <span class="kw">return</span> res
+
+<span class="bi">print</span>(<span class="fn">single_number</span>([<span class="nu">4</span>, <span class="nu">1</span>, <span class="nu">2</span>, <span class="nu">1</span>, <span class="nu">2</span>]))  <span class="cm"># 4</span></code></pre></div>
+</div>
+
+<div class="page-nav">
+  <a href="dp.html"><span class="nav-label">← Previous</span><span class="nav-title">Dynamic Programming</span></a>
+  <a href="advanced-ds.html" class="next"><span class="nav-label">Next →</span><span class="nav-title">Advanced DS</span></a>
+</div>
+</main>
+<button id="btt" aria-label="Back to top">↑</button>
+<script src="script.js"></script>
+</body>
+</html>

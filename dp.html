@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>Dynamic Programming (DP) — PyDSA</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="style.css"/>
+</head>
+<body>
+<nav class="navbar"><div class="nav-inner">
+  <a href="index.html" class="nav-brand"><span class="icon">⟨/⟩</span><span>PyDSA</span></a>
+  <ul class="nav-links" id="nav-links">
+    <li><a href="basics.html">Basics</a></li><li><a href="loops.html">Loops</a></li><li><a href="oop.html">OOP</a></li>
+    <li><a href="strings.html">Strings</a></li><li><a href="lists.html">Lists</a></li><li><a href="dictionaries.html">Dicts</a></li>
+    <li><a href="stacks-queues.html">Stacks</a></li><li><a href="trees.html">Trees</a></li><li><a href="sorting.html">Sorting</a></li>
+    <li><a href="recursion.html">Recursion</a></li><li><a href="dp.html" class="active">DP</a></li>
+  </ul>
+  <button class="nav-toggle" id="nav-toggle" aria-label="Menu"><span></span><span></span><span></span></button>
+</div></nav>
+
+<header class="page-hero">
+  <span class="emoji">🧩</span>
+  <h1>Dynamic Programming (DP) Mastery</h1>
+  <p>Top-Down (Memoization) vs Bottom-Up (Tabulation), 5 core DP patterns, state transition tables, and classic interview problems.</p>
+</header>
+<div class="breadcrumb"><a href="index.html">Home</a><span>›</span>Dynamic Programming</div>
+<main class="content">
+
+<!-- ════ WHEN TO USE & QUESTIONS SOLVED ════ -->
+<div class="topic-card" style="border-left:4px solid var(--accent)">
+  <span class="section-label">Interview Applications</span>
+  <h2>🎯 What Problems Are Solved Using Dynamic Programming?</h2>
+  <p>DP is used when a problem exhibits <strong>Overlapping Subproblems</strong> and <strong>Optimal Substructure</strong>.</p>
+  
+  <div class="table-wrap"><table>
+    <thead><tr><th>DP Pattern</th><th>Key Subproblem Structure</th><th>Top LeetCode / Interview Questions</th></tr></thead>
+    <tbody>
+      <tr><td><strong>1D DP / Fibonacci Style</strong></td><td><code>dp[i]</code> depends on <code>dp[i-1]</code>, <code>dp[i-2]</code></td><td>Climbing Stairs (#70), House Robber (#198), Decode Ways (#91)</td></tr>
+      <tr><td><strong>Unbounded / 0-1 Knapsack</strong></td><td>Choosing/skipping items with weight/value constraints</td><td>Coin Change (#322), Partition Equal Subset Sum (#416)</td></tr>
+      <tr><td><strong>Longest Common Subsequence (LCS)</strong></td><td>Comparing 2 strings <code>dp[i][j]</code></td><td>Longest Common Subsequence (#1143), Edit Distance (#72)</td></tr>
+      <tr><td><strong>Longest Increasing Subsequence (LIS)</strong></td><td>Subsequence growth <code>dp[i] = max(dp[j] + 1)</code></td><td>Longest Increasing Subsequence (#300), Russian Doll Envelopes (#354)</td></tr>
+      <tr><td><strong>Interval / Grid DP</strong></td><td>Grid paths or range subproblems <code>dp[i][j]</code></td><td>Unique Paths (#62), Minimum Path Sum (#64), Longest Palindromic Substring (#5)</td></tr>
+    </tbody>
+  </table></div>
+</div>
+
+<!-- ════ TOP-DOWN VS BOTTOM-UP ════ -->
+<div class="topic-card">
+  <span class="section-label">Core Concepts</span>
+  <h2>⚡ Top-Down (Memoization) vs Bottom-Up (Tabulation)</h2>
+
+  <div class="two-col">
+    <div>
+      <h4>Top-Down (Recursion + Memoization)</h4>
+      <p>Starts at the target answer <code>N</code> and recursively breaks down into subproblems, caching results in a dict or array to avoid recalculation.</p>
+      <ul>
+        <li>Uses recursion call stack</li>
+        <li>Intuitive to write from recursive relation</li>
+        <li>Time: <code>O(N)</code>, Space: <code>O(N)</code> stack + memo</li>
+      </ul>
+    </div>
+    <div>
+      <h4>Bottom-Up (Iterative Tabulation)</h4>
+      <p>Starts at base cases (e.g. <code>dp[0]</code>, <code>dp[1]</code>) and fills a 1D/2D table iteratively using loops.</p>
+      <ul>
+        <li>No recursion overhead / stack overflow</li>
+        <li>Easy to optimize space (e.g. <code>O(N) → O(1)</code>)</li>
+        <li>Time: <code>O(N)</code>, Space: <code>O(N)</code> or <code>O(1)</code></li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- ════ PATTERN 1: 1D DP (CLIMBING STAIRS & HOUSE ROBBER) ════ -->
+<div class="topic-card">
+  <span class="section-label">Pattern 1</span>
+  <h2>🪜 1D DP: Climbing Stairs & House Robber</h2>
+
+  <div class="code-block"><div class="code-header"><div class="code-dots"><span></span><span></span><span></span></div><span class="code-filename">climbing_stairs.py</span><button class="code-copy">Copy</button></div>
+<pre><code><span class="cm"># LeetCode #70 — Climbing Stairs</span>
+<span class="cm"># State: dp[i] = number of ways to reach step i</span>
+<span class="cm"># Transition: dp[i] = dp[i-1] + dp[i-2]</span>
+
+<span class="kw">def</span> <span class="fn">climb_stairs</span>(n: <span class="bi">int</span>) -> <span class="bi">int</span>:
+    <span class="kw">if</span> n &lt;= <span class="nu">2</span>: <span class="kw">return</span> n
+    <span class="fn">prev1</span>, <span class="fn">prev2</span> = <span class="nu">2</span>, <span class="nu">1</span>
+    <span class="kw">for</span> i <span class="kw">in</span> <span class="bi">range</span>(<span class="nu">3</span>, n + <span class="nu">1</span>):
+        <span class="fn">curr</span> = prev1 + prev2
+        prev2 = prev1
+        prev1 = curr
+    <span class="kw">return</span> prev1
+
+<span class="bi">print</span>(<span class="fn">climb_stairs</span>(<span class="nu">5</span>))  <span class="cm"># 8 ways</span></code></pre></div>
+</div>
+
+<!-- ════ PATTERN 2: COIN CHANGE (UNBOUNDED KNAPSACK) ════ -->
+<div class="topic-card">
+  <span class="section-label">Pattern 2</span>
+  <h2>🪙 Coin Change (LeetCode #322)</h2>
+  <p>Find minimum coins needed to make amount <code>T</code>. <code>dp[i]</code> = min coins for amount <code>i</code>.</p>
+
+  <div class="code-block"><div class="code-header"><div class="code-dots"><span></span><span></span><span></span></div><span class="code-filename">coin_change.py</span><button class="code-copy">Copy</button></div>
+<pre><code><span class="kw">def</span> <span class="fn">coin_change</span>(coins: <span class="bi">list</span>, amount: <span class="bi">int</span>) -> <span class="bi">int</span>:
+    <span class="fn">dp</span> = [<span class="bi">float</span>(<span class="st">'inf'</span>)] * (amount + <span class="nu">1</span>)
+    dp[<span class="nu">0</span>] = <span class="nu">0</span>  <span class="cm"># Base case: 0 coins for amount 0</span>
+
+    <span class="kw">for</span> i <span class="kw">in</span> <span class="bi">range</span>(<span class="nu">1</span>, amount + <span class="nu">1</span>):
+        <span class="kw">for</span> c <span class="kw">in</span> coins:
+            <span class="kw">if</span> i - c >= <span class="nu">0</span>:
+                dp[i] = <span class="bi">min</span>(dp[i], dp[i - c] + <span class="nu">1</span>)
+
+    <span class="kw">return</span> dp[amount] <span class="kw">if</span> dp[amount] != <span class="bi">float</span>(<span class="st">'inf'</span>) <span class="kw">else</span> -<span class="nu">1</span>
+
+<span class="bi">print</span>(<span class="fn">coin_change</span>([<span class="nu">1</span>, <span class="nu">2</span>, <span class="nu">5</span>], <span class="nu">11</span>))  <span class="cm"># 3 coins (5 + 5 + 1)</span></code></pre></div>
+
+  <h3>State Transition Table for Coin Change (coins=[1, 2, 5], amount=5)</h3>
+  <div class="table-wrap"><table>
+    <thead><tr><th>Amount i</th><th>dp[i-1] + 1</th><th>dp[i-2] + 1</th><th>dp[i-5] + 1</th><th>dp[i] Min Value</th></tr></thead>
+    <tbody>
+      <tr><td>0</td><td>-</td><td>-</td><td>-</td><td><strong>0</strong></td></tr>
+      <tr><td>1</td><td>dp[0]+1 = 1</td><td>-</td><td>-</td><td><strong>1</strong></td></tr>
+      <tr><td>2</td><td>dp[1]+1 = 2</td><td>dp[0]+1 = 1</td><td>-</td><td><strong>1</strong> (coin 2)</td></tr>
+      <tr><td>3</td><td>dp[2]+1 = 2</td><td>dp[1]+1 = 2</td><td>-</td><td><strong>2</strong> (2+1)</td></tr>
+      <tr><td>4</td><td>dp[3]+1 = 3</td><td>dp[2]+1 = 2</td><td>-</td><td><strong>2</strong> (2+2)</td></tr>
+      <tr><td>5</td><td>dp[4]+1 = 3</td><td>dp[3]+1 = 3</td><td>dp[0]+1 = 1</td><td><strong>1</strong> (coin 5)</td></tr>
+    </tbody>
+  </table></div>
+</div>
+
+<!-- ════ PATTERN 3: LONGEST COMMON SUBSEQUENCE ════ -->
+<div class="topic-card">
+  <span class="section-label">Pattern 3</span>
+  <h2>🔤 Longest Common Subsequence (LCS) (LeetCode #1143)</h2>
+
+  <div class="code-block"><div class="code-header"><div class="code-dots"><span></span><span></span><span></span></div><span class="code-filename">lcs.py</span><button class="code-copy">Copy</button></div>
+<pre><code><span class="kw">def</span> <span class="fn">longest_common_subsequence</span>(text1: <span class="bi">str</span>, text2: <span class="bi">str</span>) -> <span class="bi">int</span>:
+    <span class="fn">m</span>, <span class="fn">n</span> = <span class="bi">len</span>(text1), <span class="bi">len</span>(text2)
+    <span class="fn">dp</span> = [[<span class="nu">0</span>] * (n + <span class="nu">1</span>) <span class="kw">for</span> _ <span class="kw">in</span> <span class="bi">range</span>(m + <span class="nu">1</span>)]
+
+    <span class="kw">for</span> i <span class="kw">in</span> <span class="bi">range</span>(<span class="nu">1</span>, m + <span class="nu">1</span>):
+        <span class="kw">for</span> j <span class="kw">in</span> <span class="bi">range</span>(<span class="nu">1</span>, n + <span class="nu">1</span>):
+            <span class="kw">if</span> text1[i - <span class="nu">1</span>] == text2[j - <span class="nu">1</span>]:
+                dp[i][j] = dp[i - <span class="nu">1</span>][j - <span class="nu">1</span>] + <span class="nu">1</span>
+            <span class="kw">else</span>:
+                dp[i][j] = <span class="bi">max</span>(dp[i - <span class="nu">1</span>][j], dp[i][j - <span class="nu">1</span>])
+
+    <span class="kw">return</span> dp[m][n]
+
+<span class="bi">print</span>(<span class="fn">longest_common_subsequence</span>(<span class="st">"abcde"</span>, <span class="st">"ace"</span>))  <span class="cm"># 3 ("ace")</span></code></pre></div>
+</div>
+
+<div class="page-nav">
+  <a href="recursion.html"><span class="nav-label">← Previous</span><span class="nav-title">Recursion</span></a>
+  <a href="complexity.html" class="next"><span class="nav-label">Next →</span><span class="nav-title">Big O Notation</span></a>
+</div>
+</main>
+<button id="btt" aria-label="Back to top">↑</button>
+<script src="script.js"></script>
+</body>
+</html>

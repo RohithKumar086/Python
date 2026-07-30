@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>Object-Oriented Programming (OOP) — PyDSA</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="style.css"/>
+</head>
+<body>
+<nav class="navbar"><div class="nav-inner">
+  <a href="index.html" class="nav-brand"><span class="icon">⟨/⟩</span><span>PyDSA</span></a>
+  <ul class="nav-links" id="nav-links">
+    <li><a href="basics.html">Basics</a></li><li><a href="loops.html">Loops</a></li><li><a href="oop.html" class="active">OOP</a></li>
+    <li><a href="strings.html">Strings</a></li><li><a href="lists.html">Lists</a></li><li><a href="dictionaries.html">Dicts</a></li>
+    <li><a href="stacks-queues.html">Stacks</a></li><li><a href="linked-lists.html">LinkedList</a></li>
+    <li><a href="trees.html">Trees</a></li><li><a href="sorting.html">Sorting</a></li>
+    <li><a href="dp.html">DP</a></li>
+  </ul>
+  <button class="nav-toggle" id="nav-toggle" aria-label="Menu"><span></span><span></span><span></span></button>
+</div></nav>
+
+<header class="page-hero">
+  <span class="emoji">🏗️</span>
+  <h1>Object-Oriented Programming (OOP) in Python</h1>
+  <p>Classes, objects, inheritance, magic (dunder) methods, decorators, and building custom data structures for interview design problems.</p>
+</header>
+<div class="breadcrumb"><a href="index.html">Home</a><span>›</span>OOP</div>
+<main class="content">
+
+<!-- ════ WHEN TO USE & QUESTIONS SOLVED ════ -->
+<div class="topic-card" style="border-left:4px solid var(--accent)">
+  <span class="section-label">Interview Applications</span>
+  <h2>🎯 What Problems & Systems Are Solved Using OOP?</h2>
+  <p>OOP is required for System Design / Object-Oriented Design (OOD) interview rounds and custom DSA node structures.</p>
+  
+  <div class="table-wrap"><table>
+    <thead><tr><th>Concept / Pattern</th><th>Interview Application</th><th>Top LeetCode / Design Questions</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Custom Node Classes</strong></td><td>Building Linked Lists, Binary Trees, N-ary Trees, Trie Nodes</td><td>Reverse Linked List (#206), Serialize/Deserialize Binary Tree (#297)</td></tr>
+      <tr><td><strong>LRU / LFU Cache Design</strong></td><td>Combining HashMap + Doubly Linked List inside a class</td><td>LRU Cache (#146), LFU Cache (#460)</td></tr>
+      <tr><td><strong>Data Structure Design</strong></td><td>Min Stack, Queue using Stacks, Trie Prefix Tree</td><td>Min Stack (#155), Implement Trie (#208), Design Underground System (#1396)</td></tr>
+      <tr><td><strong>Dunder Methods (<code>__lt__</code>)</strong></td><td>Custom object comparison in Heap (<code>heapq</code>) or sorting</td><td>Merge K Sorted Lists (#23), Top K Frequent Words (#692)</td></tr>
+      <tr><td><strong>System Design (OOD)</strong></td><td>Parking Lot, Elevator System, Library Management</td><td>Design Parking System (#1603), Design Tic-Tac-Toe (#348)</td></tr>
+    </tbody>
+  </table></div>
+</div>
+
+<!-- ════ OOP CORE PILLARS ════ -->
+<div class="topic-card">
+  <span class="section-label">Fundamentals</span>
+  <h2>🏛️ The 4 Pillars of OOP</h2>
+
+  <div class="two-col">
+    <div>
+      <h4>1. Encapsulation</h4>
+      <p>Bundling data (attributes) and methods that operate on that data into a single class, hiding internal implementation details using private attributes (<code>_private</code> or <code>__private</code>).</p>
+    </div>
+    <div>
+      <h4>2. Abstraction</h4>
+      <p>Hiding complex internal logic behind a simple public interface (e.g. using abstract base classes with <code>abc.ABC</code>).</p>
+    </div>
+  </div>
+
+  <div class="two-col">
+    <div>
+      <h4>3. Inheritance</h4>
+      <p>Allowing a child class to inherit attributes and methods from a parent class, promoting code reuse.</p>
+    </div>
+    <div>
+      <h4>4. Polymorphism</h4>
+      <p>Allowing different classes to respond to the same method invocation in their own specific way (method overriding).</p>
+    </div>
+  </div>
+</div>
+
+<!-- ════ CLASS ANATOMY & CODE ════ -->
+<div class="topic-card">
+  <span class="section-label">Implementation</span>
+  <h2>💻 Anatomy of a Python Class</h2>
+
+  <div class="code-block"><div class="code-header"><div class="code-dots"><span></span><span></span><span></span></div><span class="code-filename">class_anatomy.py</span><button class="code-copy">Copy</button></div>
+<pre><code><span class="kw">class</span> <span class="fn">BankAccount</span>:
+    <span class="cm"># Class attribute (shared by ALL instances)</span>
+    bank_name = <span class="st">"Global Tech Bank"</span>
+
+    <span class="kw">def</span> <span class="fn">__init__</span>(self, owner: <span class="bi">str</span>, balance: <span class="bi">float</span> = <span class="nu">0.0</span>):
+        <span class="cm"># Instance attributes (unique to each object)</span>
+        self.owner = owner
+        self._balance = balance  <span class="cm"># Protected attribute (convention)</span>
+
+    <span class="cm"># Instance method</span>
+    <span class="kw">def</span> <span class="fn">deposit</span>(self, amount: <span class="bi">float</span>):
+        <span class="kw">if</span> amount > <span class="nu">0</span>:
+            self._balance += amount
+            <span class="bi">print</span>(<span class="st">f"Deposited ${amount:.2f}. New Balance: ${self._balance:.2f}"</span>)
+
+    <span class="kw">def</span> <span class="fn">withdraw</span>(self, amount: <span class="bi">float</span>) -> <span class="bi">bool</span>:
+        <span class="kw">if</span> <span class="nu">0</span> &lt; amount &lt;= self._balance:
+            self._balance -= amount
+            <span class="kw">return</span> <span class="nu">True</span>
+        <span class="kw">return</span> <span class="nu">False</span>
+
+    <span class="cm"># Property decorator (Getter)</span>
+    <span class="op">@property</span>
+    <span class="kw">def</span> <span class="fn">balance</span>(self):
+        <span class="kw">return</span> self._balance
+
+    <span class="cm"># Class method</span>
+    <span class="op">@classmethod</span>
+    <span class="kw">def</span> <span class="fn">set_bank_name</span>(cls, name: <span class="bi">str</span>):
+        cls.bank_name = name
+
+    <span class="cm"># Static method (utility function independent of state)</span>
+    <span class="op">@staticmethod</span>
+    <span class="kw">def</span> <span class="fn">is_valid_interest_rate</span>(rate: <span class="bi">float</span>) -> <span class="bi">bool</span>:
+        <span class="kw">return</span> <span class="nu">0</span> &lt;= rate &lt;= <span class="nu">15.0</span>
+
+<span class="cm"># Usage</span>
+<span class="fn">acc</span> = BankAccount(<span class="st">"Rohith"</span>, <span class="nu">1000.0</span>)
+acc.deposit(<span class="nu">500.0</span>)            <span class="cm"># Deposited $500.00. New Balance: $1500.00</span>
+<span class="bi">print</span>(acc.balance)            <span class="cm"># 1500.0 (accessed via @property)</span>
+<span class="bi">print</span>(BankAccount.bank_name)  <span class="cm"># Global Tech Bank</span></code></pre></div>
+</div>
+
+<!-- ════ MAGIC (DUNDER) METHODS ════ -->
+<div class="topic-card">
+  <span class="section-label">Special Methods</span>
+  <h2>🪄 Essential Dunder (Magic) Methods for DSA</h2>
+  <p>Dunder (double underscore) methods allow custom objects to integrate natively with Python operators and built-in functions.</p>
+
+  <div class="table-wrap"><table>
+    <thead><tr><th>Method</th><th>Trigger / Operator</th><th>Purpose in DSA</th></tr></thead>
+    <tbody>
+      <tr><td><code>__init__(self, ...)</code></td><td><code>Obj(...)</code></td><td>Constructor — initializes object attributes</td></tr>
+      <tr><td><code>__str__(self)</code></td><td><code>str(obj)</code> or <code>print(obj)</code></td><td>User-friendly string representation</td></tr>
+      <tr><td><code>__repr__(self)</code></td><td><code>repr(obj)</code> or interactive REPL</td><td>Developer string representation for debugging</td></tr>
+      <tr><td><code>__len__(self)</code></td><td><code>len(obj)</code></td><td>Allows custom collection to support <code>len()</code></td></tr>
+      <tr><td><code>__eq__(self, other)</code></td><td><code>obj1 == obj2</code></td><td>Defines equality comparison</td></tr>
+      <tr><td><code>__lt__(self, other)</code></td><td><code>obj1 < obj2</code></td><td><strong>Crucial for Heapq!</strong> Enables custom priority sorting</td></tr>
+      <tr><td><code>__getitem__(self, k)</code></td><td><code>obj[k]</code></td><td>Allows index or key access like list or dict</td></tr>
+    </tbody>
+  </table></div>
+
+  <div class="code-block"><div class="code-header"><div class="code-dots"><span></span><span></span><span></span></div><span class="code-filename">dunder_methods.py</span><button class="code-copy">Copy</button></div>
+<pre><code><span class="kw">import</span> heapq
+
+<span class="kw">class</span> <span class="fn">Student</span>:
+    <span class="kw">def</span> <span class="fn">__init__</span>(self, name: <span class="bi">str</span>, gpa: <span class="bi">float</span>):
+        self.name = name
+        self.gpa = gpa
+
+    <span class="cm"># __lt__ allows heapq to compare Student objects by GPA!</span>
+    <span class="kw">def</span> <span class="fn">__lt__</span>(self, other):
+        <span class="kw">return</span> self.gpa > other.gpa  <span class="cm"># Higher GPA = Higher Priority</span>
+
+    <span class="kw">def</span> <span class="fn">__repr__</span>(self):
+        <span class="kw">return</span> <span class="st">f"Student('{self.name}', {self.gpa})"</span>
+
+<span class="fn">students</span> = [
+    Student(<span class="st">"Alice"</span>, <span class="nu">3.5</span>),
+    Student(<span class="st">"Bob"</span>, <span class="nu">3.9</span>),
+    Student(<span class="st">"Charlie"</span>, <span class="nu">3.7</span>)
+]
+
+heapq.heapify(students)
+<span class="bi">print</span>(heapq.heappop(students))  <span class="cm"># Student('Bob', 3.9) — Highest GPA popped first!</span></code></pre></div>
+</div>
+
+<!-- ════ REAL-WORLD DESIGN PROBLEM: LRU CACHE ════ -->
+<div class="topic-card">
+  <span class="section-label">Classic Interview Design Problem</span>
+  <h2>⚙️ LRU Cache Design (LeetCode #146)</h2>
+  <p>An LRU (Least Recently Used) cache discards the least recently used item when capacity is reached. Implemented using a <strong>Hash Map + Doubly Linked List</strong> in <code>O(1)</code> time!</p>
+
+  <div class="code-block"><div class="code-header"><div class="code-dots"><span></span><span></span><span></span></div><span class="code-filename">lru_cache.py</span><button class="code-copy">Copy</button></div>
+<pre><code><span class="kw">class</span> <span class="fn">Node</span>:
+    <span class="kw">def</span> <span class="fn">__init__</span>(self, key: <span class="bi">int</span> = <span class="nu">0</span>, val: <span class="bi">int</span> = <span class="nu">0</span>):
+        self.key = key
+        self.val = val
+        self.prev = <span class="nu">None</span>
+        self.next = <span class="nu">None</span>
+
+<span class="kw">class</span> <span class="fn">LRUCache</span>:
+    <span class="kw">def</span> <span class="fn">__init__</span>(self, capacity: <span class="bi">int</span>):
+        self.cap = capacity
+        self.cache = {}  <span class="cm"># key → node</span>
+        <span class="cm"># Dummy head & tail pointers</span>
+        self.head = Node()
+        self.tail = Node()
+        self.head.next = self.tail
+        self.tail.prev = self.head
+
+    <span class="kw">def</span> <span class="fn">_remove</span>(self, node: Node):
+        <span class="fn">p</span>, <span class="fn">n</span> = node.prev, node.next
+        p.next = n
+        n.prev = p
+
+    <span class="kw">def</span> <span class="fn">_add_to_front</span>(self, node: Node):
+        <span class="fn">nxt</span> = self.head.next
+        self.head.next = node
+        node.prev = self.head
+        node.next = nxt
+        nxt.prev = node
+
+    <span class="kw">def</span> <span class="fn">get</span>(self, key: <span class="bi">int</span>) -> <span class="bi">int</span>:
+        <span class="kw">if</span> key <span class="kw">in</span> self.cache:
+            <span class="fn">node</span> = self.cache[key]
+            self._remove(node)
+            self._add_to_front(node)  <span class="cm"># Move to most recent</span>
+            <span class="kw">return</span> node.val
+        <span class="kw">return</span> -<span class="nu">1</span>
+
+    <span class="kw">def</span> <span class="fn">put</span>(self, key: <span class="bi">int</span>, value: <span class="bi">int</span>) -> <span class="nu">None</span>:
+        <span class="kw">if</span> key <span class="kw">in</span> self.cache:
+            self._remove(self.cache[key])
+        <span class="fn">new_node</span> = Node(key, value)
+        self.cache[key] = new_node
+        self._add_to_front(new_node)
+
+        <span class="kw">if</span> <span class="bi">len</span>(self.cache) > self.cap:
+            <span class="cm"># Evict least recently used (node before tail)</span>
+            <span class="fn">lru</span> = self.tail.prev
+            self._remove(lru)
+            <span class="kw">del</span> self.cache[lru.key]
+
+<span class="cm"># Usage</span>
+<span class="fn">lru</span> = LRUCache(<span class="nu">2</span>)
+lru.put(<span class="nu">1</span>, <span class="nu">10</span>)
+lru.put(<span class="nu">2</span>, <span class="nu">20</span>)
+<span class="bi">print</span>(lru.get(<span class="nu">1</span>))     <span class="cm"># 10 (key 1 becomes most recently used)</span>
+lru.put(<span class="nu">3</span>, <span class="nu">30</span>)        <span class="cm"># evicts key 2!</span>
+<span class="bi">print</span>(lru.get(<span class="nu">2</span>))     <span class="cm"># -1 (not found)</span></code></pre></div>
+</div>
+
+<!-- ════ PRO TIPS & THINGS YOU MUST KNOW ════ -->
+<div class="topic-card">
+  <span class="section-label">Must-Know Secrets</span>
+  <h2>💡 Pro-Tips & Interview Things You MUST Know</h2>
+  <ol>
+    <li><strong><code>__slots__</code> for Memory Optimization:</strong> Defining <code>__slots__ = ('val', 'left', 'right')</code> in tree/linked list nodes reduces memory footprint by ~60% by suppressing instance <code>__dict__</code>!</li>
+    <li><strong>Inheritance MRO (Method Resolution Order):</strong> Check standard class inheritance order using <code>ClassName.__mro__</code> or <code>ClassName.mro()</code>.</li>
+    <li><strong>Composition over Inheritance:</strong> Prefer combining smaller objects inside a class (like LRUCache using Node objects) rather than creating deep inheritance hierarchies.</li>
+  </ol>
+</div>
+
+<div class="page-nav">
+  <a href="loops.html"><span class="nav-label">← Previous</span><span class="nav-title">Loops</span></a>
+  <a href="strings.html" class="next"><span class="nav-label">Next →</span><span class="nav-title">Strings</span></a>
+</div>
+</main>
+<button id="btt" aria-label="Back to top">↑</button>
+<script src="script.js"></script>
+</body>
+</html>
