@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <meta name="description" content="Complete Python & DSA reference — separate pages for strings, lists, dictionaries, trees, graphs, sorting, and more."/>
+  <title>Python & DSA Mastery — Complete Reference Guide</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="style.css"/>
+</head>
+<body>
+
+<!-- Navbar -->
+<nav class="navbar">
+  <div class="nav-inner">
+    <a href="index.html" class="nav-brand">
+      <span class="icon">⟨/⟩</span>
+      <span>PyDSA</span>
+    </a>
+    <ul class="nav-links" id="nav-links">
+      <li><a href="basics.html">Basics</a></li>
+      <li><a href="strings.html">Strings</a></li>
+      <li><a href="lists.html">Lists</a></li>
+      <li><a href="dictionaries.html">Dicts</a></li>
+      <li><a href="stacks-queues.html">Stacks</a></li>
+      <li><a href="linked-lists.html">LinkedList</a></li>
+      <li><a href="trees.html">Trees</a></li>
+      <li><a href="sorting.html">Sorting</a></li>
+      <li><a href="recursion.html">Recursion</a></li>
+    </ul>
+    <button class="nav-toggle" id="nav-toggle" aria-label="Menu"><span></span><span></span><span></span></button>
+  </div>
+</nav>
+
+<!-- Hero -->
+<header class="home-hero">
+  <span class="badge">🐍 Your DSA Journey Starts Here</span>
+  <h1>Python & DSA<br>Complete Reference</h1>
+  <p>Master Python fundamentals, data structures, and algorithms — every topic on its own detailed page with examples, visuals, and code.</p>
+  <div class="stats-row" style="display:flex;justify-content:center;gap:40px;margin-top:32px;flex-wrap:wrap">
+    <div style="text-align:center">
+      <div class="stat-num" data-target="14" style="font-size:2rem;font-weight:800">0</div>
+      <div style="font-size:.78rem;opacity:.7;text-transform:uppercase;letter-spacing:.05em">Topic Pages</div>
+    </div>
+    <div style="text-align:center">
+      <div class="stat-num" data-target="80" style="font-size:2rem;font-weight:800">0</div>
+      <div style="font-size:.78rem;opacity:.7;text-transform:uppercase;letter-spacing:.05em">Code Examples</div>
+    </div>
+    <div style="text-align:center">
+      <div class="stat-num" data-target="12" style="font-size:2rem;font-weight:800">0</div>
+      <div style="font-size:.78rem;opacity:.7;text-transform:uppercase;letter-spacing:.05em">Data Structures</div>
+    </div>
+  </div>
+</header>
+
+<!-- Topic Grid -->
+<main class="topic-grid">
+
+  <!-- BASICS -->
+  <a href="basics.html" class="topic-tile">
+    <span class="tile-emoji">📦</span>
+    <h3>Python Basics</h3>
+    <p>Variables, data types, operators, input/output, control flow, and functions.</p>
+    <span class="tile-tag tag-basics">Foundation</span>
+  </a>
+
+  <a href="strings.html" class="topic-tile">
+    <span class="tile-emoji">🔤</span>
+    <h3>Strings</h3>
+    <p>Indexing, slicing, methods, formatting, and common string DSA patterns.</p>
+    <span class="tile-tag tag-basics">Foundation</span>
+  </a>
+
+  <!-- DATA STRUCTURES -->
+  <a href="lists.html" class="topic-tile">
+    <span class="tile-emoji">📋</span>
+    <h3>Lists</h3>
+    <p>Dynamic arrays — methods, comprehensions, 2D arrays, and complexity.</p>
+    <span class="tile-tag tag-ds">Data Structure</span>
+  </a>
+
+  <a href="tuples-sets.html" class="topic-tile">
+    <span class="tile-emoji">🔒</span>
+    <h3>Tuples & Sets</h3>
+    <p>Immutable sequences, unique collections, and set operations.</p>
+    <span class="tile-tag tag-ds">Data Structure</span>
+  </a>
+
+  <a href="dictionaries.html" class="topic-tile">
+    <span class="tile-emoji">🗂️</span>
+    <h3>Dictionaries</h3>
+    <p>Hash maps — O(1) lookups, methods, comprehensions, and DSA patterns.</p>
+    <span class="tile-tag tag-ds">Data Structure</span>
+  </a>
+
+  <a href="stacks-queues.html" class="topic-tile">
+    <span class="tile-emoji">📚</span>
+    <h3>Stacks & Queues</h3>
+    <p>LIFO & FIFO — implementations, use cases, and classic problems.</p>
+    <span class="tile-tag tag-ds">Data Structure</span>
+  </a>
+
+  <a href="linked-lists.html" class="topic-tile">
+    <span class="tile-emoji">🔗</span>
+    <h3>Linked Lists</h3>
+    <p>Singly & doubly linked lists — insert, delete, reverse, detect cycle.</p>
+    <span class="tile-tag tag-ds">Data Structure</span>
+  </a>
+
+  <a href="trees.html" class="topic-tile">
+    <span class="tile-emoji">🌳</span>
+    <h3>Trees & BST</h3>
+    <p>Binary trees, BST operations, traversals, and heaps.</p>
+    <span class="tile-tag tag-ds">Data Structure</span>
+  </a>
+
+  <a href="graphs.html" class="topic-tile">
+    <span class="tile-emoji">🕸️</span>
+    <h3>Graphs</h3>
+    <p>Adjacency lists, BFS, DFS, and graph traversal patterns.</p>
+    <span class="tile-tag tag-ds">Data Structure</span>
+  </a>
+
+  <!-- ALGORITHMS -->
+  <a href="recursion.html" class="topic-tile">
+    <span class="tile-emoji">🪆</span>
+    <h3>Recursion</h3>
+    <p>Base cases, call stack, classic problems, and memoization.</p>
+    <span class="tile-tag tag-algo">Algorithm</span>
+  </a>
+
+  <a href="searching.html" class="topic-tile">
+    <span class="tile-emoji">🔍</span>
+    <h3>Searching</h3>
+    <p>Linear search, binary search, two pointers, and sliding window.</p>
+    <span class="tile-tag tag-algo">Algorithm</span>
+  </a>
+
+  <a href="sorting.html" class="topic-tile">
+    <span class="tile-emoji">📶</span>
+    <h3>Sorting</h3>
+    <p>Bubble, selection, insertion, merge, and quick sort with visuals.</p>
+    <span class="tile-tag tag-algo">Algorithm</span>
+  </a>
+
+  <!-- META -->
+  <a href="complexity.html" class="topic-tile">
+    <span class="tile-emoji">📈</span>
+    <h3>Big O Notation</h3>
+    <p>Time & space complexity analysis — the language of DSA interviews.</p>
+    <span class="tile-tag tag-meta">Essential</span>
+  </a>
+
+  <a href="roadmap.html" class="topic-tile">
+    <span class="tile-emoji">🗺️</span>
+    <h3>DSA Roadmap</h3>
+    <p>Week-by-week study plan and pro tips for your DSA journey.</p>
+    <span class="tile-tag tag-meta">Essential</span>
+  </a>
+</main>
+
+<button id="btt" aria-label="Back to top">↑</button>
+<script src="script.js"></script>
+</body>
+</html>

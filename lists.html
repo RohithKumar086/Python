@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>Lists — PyDSA</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="style.css"/>
+</head>
+<body>
+<nav class="navbar"><div class="nav-inner">
+  <a href="index.html" class="nav-brand"><span class="icon">⟨/⟩</span><span>PyDSA</span></a>
+  <ul class="nav-links" id="nav-links">
+    <li><a href="basics.html">Basics</a></li><li><a href="strings.html">Strings</a></li>
+    <li><a href="lists.html" class="active">Lists</a></li><li><a href="dictionaries.html">Dicts</a></li>
+    <li><a href="stacks-queues.html">Stacks</a></li><li><a href="linked-lists.html">LinkedList</a></li>
+    <li><a href="trees.html">Trees</a></li><li><a href="sorting.html">Sorting</a></li>
+    <li><a href="recursion.html">Recursion</a></li>
+  </ul>
+  <button class="nav-toggle" id="nav-toggle" aria-label="Menu"><span></span><span></span><span></span></button>
+</div></nav>
+<header class="page-hero"><span class="emoji">📋</span><h1>Lists</h1><p>Python's most versatile data structure — dynamic arrays with O(1) access, powerful methods, and list comprehensions.</p></header>
+<div class="breadcrumb"><a href="index.html">Home</a><span>›</span>Lists</div>
+<main class="content">
+
+<div class="topic-card">
+  <span class="section-label">Fundamentals</span>
+  <h2>📋 What is a List?</h2>
+  <p>A <strong>list</strong> is an ordered, mutable collection that can hold any data type. Under the hood, Python lists are <strong>dynamic arrays</strong> — contiguous blocks of memory that resize automatically.</p>
+  <div class="visual">
+    <div class="visual-title">List in Memory — [10, 20, 30, 40, 50]</div>
+    <div class="mem-row">
+      <div class="mem-cell"><span class="mem-idx">0</span><span class="mem-val">10</span></div>
+      <div class="mem-cell"><span class="mem-idx">1</span><span class="mem-val">20</span></div>
+      <div class="mem-cell"><span class="mem-idx">2</span><span class="mem-val">30</span></div>
+      <div class="mem-cell"><span class="mem-idx">3</span><span class="mem-val">40</span></div>
+      <div class="mem-cell"><span class="mem-idx">4</span><span class="mem-val">50</span></div>
+    </div>
+    <p class="mem-note">Contiguous memory → O(1) random access by index</p>
+  </div>
+</div>
+
+<div class="topic-card">
+  <span class="section-label">Creating & Accessing</span>
+  <h2>🔨 Creating Lists & Accessing Elements</h2>
+  <div class="code-block"><div class="code-header"><div class="code-dots"><span></span><span></span><span></span></div><span class="code-filename">lists_basics.py</span><button class="code-copy">Copy</button></div>
+<pre><code><span class="cm"># Creating lists</span>
+<span class="fn">nums</span> = [<span class="nu">10</span>, <span class="nu">20</span>, <span class="nu">30</span>, <span class="nu">40</span>, <span class="nu">50</span>]
+<span class="fn">mixed</span> = [<span class="nu">1</span>, <span class="st">"two"</span>, <span class="nu">3.0</span>, <span class="nu">True</span>, [<span class="nu">5</span>, <span class="nu">6</span>]]
+<span class="fn">empty</span> = []
+<span class="fn">zeros</span> = [<span class="nu">0</span>] * <span class="nu">5</span>       <span class="cm"># [0, 0, 0, 0, 0]</span>
+<span class="fn">from_range</span> = <span class="bi">list</span>(<span class="bi">range</span>(<span class="nu">1</span>, <span class="nu">6</span>))  <span class="cm"># [1, 2, 3, 4, 5]</span>
+
+<span class="cm"># Indexing (same as strings)</span>
+<span class="bi">print</span>(nums[<span class="nu">0</span>])        <span class="cm"># 10  (first)</span>
+<span class="bi">print</span>(nums[-<span class="nu">1</span>])       <span class="cm"># 50  (last)</span>
+<span class="bi">print</span>(nums[<span class="nu">1</span>:<span class="nu">4</span>])      <span class="cm"># [20, 30, 40]  (slice)</span>
+<span class="bi">print</span>(nums[::-<span class="nu">1</span>])     <span class="cm"># [50, 40, 30, 20, 10]  (reversed)</span>
+
+<span class="cm"># Length, membership, count</span>
+<span class="bi">print</span>(<span class="bi">len</span>(nums))       <span class="cm"># 5</span>
+<span class="bi">print</span>(<span class="nu">30</span> <span class="kw">in</span> nums)     <span class="cm"># True</span>
+<span class="bi">print</span>(nums.count(<span class="nu">30</span>))  <span class="cm"># 1</span>
+<span class="bi">print</span>(nums.index(<span class="nu">30</span>))  <span class="cm"># 2  (index of first occurrence)</span></code></pre></div>
+</div>
+
+<div class="topic-card">
+  <span class="section-label">Modifying</span>
+  <h2>✏️ All List Methods</h2>
+  <div class="code-block"><div class="code-header"><div class="code-dots"><span></span><span></span><span></span></div><span class="code-filename">list_methods.py</span><button class="code-copy">Copy</button></div>
+<pre><code><span class="fn">nums</span> = [<span class="nu">10</span>, <span class="nu">20</span>, <span class="nu">30</span>]
+
+<span class="cm"># ─── Adding elements ───</span>
+nums.append(<span class="nu">40</span>)          <span class="cm"># [10, 20, 30, 40]       — add to END</span>
+nums.insert(<span class="nu">1</span>, <span class="nu">15</span>)       <span class="cm"># [10, 15, 20, 30, 40]   — add at INDEX</span>
+nums.extend([<span class="nu">50</span>, <span class="nu">60</span>])    <span class="cm"># [10, 15, 20, 30, 40, 50, 60] — add MULTIPLE</span>
+nums += [<span class="nu">70</span>]              <span class="cm"># same as extend</span>
+
+<span class="cm"># ─── Removing elements ───</span>
+nums.remove(<span class="nu">15</span>)           <span class="cm"># removes FIRST occurrence of 15</span>
+<span class="fn">last</span> = nums.pop()         <span class="cm"># removes & returns LAST element (70)</span>
+<span class="fn">item</span> = nums.pop(<span class="nu">0</span>)        <span class="cm"># removes & returns element at INDEX 0</span>
+<span class="kw">del</span> nums[<span class="nu">1</span>]               <span class="cm"># delete by index</span>
+nums.clear()               <span class="cm"># remove ALL elements → []</span>
+
+<span class="cm"># ─── Sorting ───</span>
+<span class="fn">data</span> = [<span class="nu">5</span>, <span class="nu">3</span>, <span class="nu">8</span>, <span class="nu">1</span>, <span class="nu">9</span>]
+data.sort()                <span class="cm"># [1, 3, 5, 8, 9]  — in-place ascending</span>
+data.sort(reverse=<span class="nu">True</span>)   <span class="cm"># [9, 8, 5, 3, 1]  — in-place descending</span>
+<span class="fn">new</span> = <span class="bi">sorted</span>(data)        <span class="cm"># returns NEW sorted list (original unchanged)</span>
+
+<span class="cm"># Sort by custom key</span>
+<span class="fn">words</span> = [<span class="st">"banana"</span>, <span class="st">"apple"</span>, <span class="st">"cherry"</span>]
+words.sort(key=<span class="bi">len</span>)       <span class="cm"># sort by length: ['apple', 'banana', 'cherry']</span>
+words.sort(key=<span class="kw">lambda</span> x: x[-<span class="nu">1</span>])  <span class="cm"># sort by last character</span>
+
+<span class="cm"># ─── Reversing ───</span>
+data.reverse()             <span class="cm"># in-place reverse</span>
+<span class="fn">rev</span> = data[::-<span class="nu">1</span>]           <span class="cm"># new reversed list</span>
+
+<span class="cm"># ─── Copying ───</span>
+<span class="fn">copy1</span> = data.copy()        <span class="cm"># shallow copy</span>
+<span class="fn">copy2</span> = data[:]            <span class="cm"># shallow copy</span>
+<span class="fn">copy3</span> = <span class="bi">list</span>(data)         <span class="cm"># shallow copy</span></code></pre></div>
+
+  <div class="info-box info-warn">
+    <span class="icon">⚠️</span>
+    <p><strong>Common Pitfall:</strong> <code>b = a</code> does NOT copy a list — both variables point to the SAME list. Use <code>b = a.copy()</code> or <code>b = a[:]</code> for a true copy.</p>
+  </div>
+</div>
+
+<div class="topic-card">
+  <span class="section-label">Advanced</span>
+  <h2>⚡ List Comprehensions</h2>
+  <p>One-line way to create lists. Syntax: <code>[expression for item in iterable if condition]</code></p>
+  <div class="code-block"><div class="code-header"><div class="code-dots"><span></span><span></span><span></span></div><span class="code-filename">comprehensions.py</span><button class="code-copy">Copy</button></div>
+<pre><code><span class="cm"># Basic: squares of 1 to 5</span>
+<span class="fn">squares</span> = [x**<span class="nu">2</span> <span class="kw">for</span> x <span class="kw">in</span> <span class="bi">range</span>(<span class="nu">1</span>, <span class="nu">6</span>)]
+<span class="cm"># [1, 4, 9, 16, 25]</span>
+
+<span class="cm"># With condition: only even numbers</span>
+<span class="fn">evens</span> = [x <span class="kw">for</span> x <span class="kw">in</span> <span class="bi">range</span>(<span class="nu">20</span>) <span class="kw">if</span> x % <span class="nu">2</span> == <span class="nu">0</span>]
+<span class="cm"># [0, 2, 4, 6, 8, 10, 12, 14, 16, 18]</span>
+
+<span class="cm"># Transform strings</span>
+<span class="fn">names</span> = [<span class="st">"alice"</span>, <span class="st">"bob"</span>, <span class="st">"charlie"</span>]
+<span class="fn">upper</span> = [n.upper() <span class="kw">for</span> n <span class="kw">in</span> names]
+<span class="cm"># ['ALICE', 'BOB', 'CHARLIE']</span>
+
+<span class="cm"># Nested comprehension: flatten 2D → 1D</span>
+<span class="fn">matrix</span> = [[<span class="nu">1</span>,<span class="nu">2</span>], [<span class="nu">3</span>,<span class="nu">4</span>], [<span class="nu">5</span>,<span class="nu">6</span>]]
+<span class="fn">flat</span> = [x <span class="kw">for</span> row <span class="kw">in</span> matrix <span class="kw">for</span> x <span class="kw">in</span> row]
+<span class="cm"># [1, 2, 3, 4, 5, 6]</span>
+
+<span class="cm"># If-else in comprehension</span>
+<span class="fn">labels</span> = [<span class="st">"even"</span> <span class="kw">if</span> x%<span class="nu">2</span>==<span class="nu">0</span> <span class="kw">else</span> <span class="st">"odd"</span> <span class="kw">for</span> x <span class="kw">in</span> <span class="bi">range</span>(<span class="nu">5</span>)]
+<span class="cm"># ['even', 'odd', 'even', 'odd', 'even']</span></code></pre></div>
+</div>
+
+<div class="topic-card">
+  <span class="section-label">2D Arrays</span>
+  <h2>🔢 Nested Lists (Matrices)</h2>
+  <div class="code-block"><div class="code-header"><div class="code-dots"><span></span><span></span><span></span></div><span class="code-filename">matrices.py</span><button class="code-copy">Copy</button></div>
+<pre><code><span class="cm"># Creating a 3×3 matrix</span>
+<span class="fn">matrix</span> = [
+    [<span class="nu">1</span>, <span class="nu">2</span>, <span class="nu">3</span>],
+    [<span class="nu">4</span>, <span class="nu">5</span>, <span class="nu">6</span>],
+    [<span class="nu">7</span>, <span class="nu">8</span>, <span class="nu">9</span>]
+]
+
+<span class="cm"># Access: matrix[row][col]</span>
+<span class="bi">print</span>(matrix[<span class="nu">0</span>][<span class="nu">0</span>])  <span class="cm"># 1  (top-left)</span>
+<span class="bi">print</span>(matrix[<span class="nu">1</span>][<span class="nu">2</span>])  <span class="cm"># 6  (row 1, col 2)</span>
+<span class="bi">print</span>(matrix[<span class="nu">2</span>][<span class="nu">1</span>])  <span class="cm"># 8  (row 2, col 1)</span>
+
+<span class="cm"># Iterate over a matrix</span>
+<span class="kw">for</span> row <span class="kw">in</span> matrix:
+    <span class="kw">for</span> val <span class="kw">in</span> row:
+        <span class="bi">print</span>(val, end=<span class="st">" "</span>)
+    <span class="bi">print</span>()
+
+<span class="cm"># Create n×m matrix filled with zeros</span>
+<span class="fn">rows</span>, <span class="fn">cols</span> = <span class="nu">3</span>, <span class="nu">4</span>
+<span class="fn">grid</span> = [[<span class="nu">0</span>] * cols <span class="kw">for</span> _ <span class="kw">in</span> <span class="bi">range</span>(rows)]
+
+<span class="cm"># ⚠️ WRONG way (rows share same inner list!):</span>
+<span class="cm"># grid = [[0] * cols] * rows  ← DON'T do this!</span>
+
+<span class="cm"># Transpose a matrix</span>
+<span class="fn">transposed</span> = [[matrix[j][i] <span class="kw">for</span> j <span class="kw">in</span> <span class="bi">range</span>(<span class="bi">len</span>(matrix))]
+              <span class="kw">for</span> i <span class="kw">in</span> <span class="bi">range</span>(<span class="bi">len</span>(matrix[<span class="nu">0</span>]))]</code></pre></div>
+</div>
+
+<div class="topic-card">
+  <span class="section-label">★ DSA Patterns</span>
+  <h2>🎯 Common List Patterns for DSA</h2>
+  <div class="code-block"><div class="code-header"><div class="code-dots"><span></span><span></span><span></span></div><span class="code-filename">list_dsa.py</span><button class="code-copy">Copy</button></div>
+<pre><code><span class="cm"># ★ Two Pointers — find pair with target sum</span>
+<span class="kw">def</span> <span class="fn">two_sum_sorted</span>(nums, target):
+    <span class="fn">left</span>, <span class="fn">right</span> = <span class="nu">0</span>, <span class="bi">len</span>(nums) - <span class="nu">1</span>
+    <span class="kw">while</span> left &lt; right:
+        <span class="fn">s</span> = nums[left] + nums[right]
+        <span class="kw">if</span> s == target:
+            <span class="kw">return</span> [left, right]
+        <span class="kw">elif</span> s &lt; target:
+            left += <span class="nu">1</span>
+        <span class="kw">else</span>:
+            right -= <span class="nu">1</span>
+    <span class="kw">return</span> []
+
+<span class="bi">print</span>(<span class="fn">two_sum_sorted</span>([<span class="nu">1</span>,<span class="nu">3</span>,<span class="nu">5</span>,<span class="nu">7</span>,<span class="nu">9</span>], <span class="nu">12</span>))  <span class="cm"># [1, 4]  (3+9=12)</span>
+
+<span class="cm"># ★ Sliding Window — max sum of k consecutive elements</span>
+<span class="kw">def</span> <span class="fn">max_sum_window</span>(nums, k):
+    <span class="fn">window</span> = <span class="bi">sum</span>(nums[:k])
+    <span class="fn">max_sum</span> = window
+    <span class="kw">for</span> i <span class="kw">in</span> <span class="bi">range</span>(k, <span class="bi">len</span>(nums)):
+        window += nums[i] - nums[i - k]
+        max_sum = <span class="bi">max</span>(max_sum, window)
+    <span class="kw">return</span> max_sum
+
+<span class="bi">print</span>(<span class="fn">max_sum_window</span>([<span class="nu">1</span>,<span class="nu">3</span>,<span class="nu">2</span>,<span class="nu">6</span>,<span class="nu">4</span>,<span class="nu">1</span>,<span class="nu">8</span>], <span class="nu">3</span>))  <span class="cm"># 13  (6+4+1? No: 4+1+8=13)</span>
+
+<span class="cm"># ★ Remove Duplicates (maintain order)</span>
+<span class="kw">def</span> <span class="fn">remove_dupes</span>(nums):
+    <span class="fn">seen</span> = <span class="bi">set</span>()
+    <span class="kw">return</span> [x <span class="kw">for</span> x <span class="kw">in</span> nums <span class="kw">if</span> <span class="kw">not</span> (x <span class="kw">in</span> seen <span class="kw">or</span> seen.add(x))]
+
+<span class="bi">print</span>(<span class="fn">remove_dupes</span>([<span class="nu">3</span>,<span class="nu">1</span>,<span class="nu">3</span>,<span class="nu">2</span>,<span class="nu">1</span>]))  <span class="cm"># [3, 1, 2]</span></code></pre></div>
+</div>
+
+<div class="topic-card">
+  <span class="section-label">Reference</span>
+  <h2>⏱️ Time Complexity</h2>
+  <div class="table-wrap"><table>
+    <thead><tr><th>Operation</th><th>Time</th><th>Note</th></tr></thead>
+    <tbody>
+      <tr><td>Access <code>list[i]</code></td><td><code>O(1)</code></td><td>Direct index lookup</td></tr>
+      <tr><td>Append <code>list.append(x)</code></td><td><code>O(1)</code> amortized</td><td>Add to end</td></tr>
+      <tr><td>Insert <code>list.insert(i, x)</code></td><td><code>O(n)</code></td><td>Shifts elements right</td></tr>
+      <tr><td>Pop last <code>list.pop()</code></td><td><code>O(1)</code></td><td>Remove from end</td></tr>
+      <tr><td>Pop index <code>list.pop(i)</code></td><td><code>O(n)</code></td><td>Shifts elements left</td></tr>
+      <tr><td>Delete <code>del list[i]</code></td><td><code>O(n)</code></td><td>Shifts elements</td></tr>
+      <tr><td>Search <code>x in list</code></td><td><code>O(n)</code></td><td>Linear scan</td></tr>
+      <tr><td>Sort <code>list.sort()</code></td><td><code>O(n log n)</code></td><td>Timsort</td></tr>
+      <tr><td>Reverse <code>list.reverse()</code></td><td><code>O(n)</code></td><td>In-place</td></tr>
+      <tr><td>Copy <code>list.copy()</code></td><td><code>O(n)</code></td><td>Shallow copy</td></tr>
+      <tr><td>Slice <code>list[a:b]</code></td><td><code>O(b-a)</code></td><td>Creates new list</td></tr>
+    </tbody>
+  </table></div>
+</div>
+
+<div class="page-nav">
+  <a href="strings.html"><span class="nav-label">← Previous</span><span class="nav-title">Strings</span></a>
+  <a href="tuples-sets.html" class="next"><span class="nav-label">Next →</span><span class="nav-title">Tuples & Sets</span></a>
+</div>
+</main>
+<button id="btt" aria-label="Back to top">↑</button>
+<script src="script.js"></script>
+</body>
+</html>

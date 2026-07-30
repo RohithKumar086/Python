@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>Trees & BST — PyDSA</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="style.css"/>
+</head>
+<body>
+<nav class="navbar"><div class="nav-inner"><a href="index.html" class="nav-brand"><span class="icon">⟨/⟩</span><span>PyDSA</span></a><ul class="nav-links" id="nav-links"><li><a href="basics.html">Basics</a></li><li><a href="strings.html">Strings</a></li><li><a href="lists.html">Lists</a></li><li><a href="dictionaries.html">Dicts</a></li><li><a href="stacks-queues.html">Stacks</a></li><li><a href="linked-lists.html">LinkedList</a></li><li><a href="trees.html" class="active">Trees</a></li><li><a href="sorting.html">Sorting</a></li><li><a href="recursion.html">Recursion</a></li></ul><button class="nav-toggle" id="nav-toggle" aria-label="Menu"><span></span><span></span><span></span></button></div></nav>
+<header class="page-hero"><span class="emoji">🌳</span><h1>Trees & BST</h1><p>Hierarchical data structures — binary trees, BST operations, traversals, and heaps.</p></header>
+<div class="breadcrumb"><a href="index.html">Home</a><span>›</span>Trees & BST</div>
+<main class="content">
+
+<div class="topic-card"><span class="section-label">Concept</span>
+<h2>🌳 Tree Terminology</h2>
+<ul>
+  <li><strong>Root:</strong> Top node (no parent)</li>
+  <li><strong>Leaf:</strong> Node with no children</li>
+  <li><strong>Edge:</strong> Connection between parent and child</li>
+  <li><strong>Depth:</strong> Distance from root to a node</li>
+  <li><strong>Height:</strong> Longest path from a node to a leaf</li>
+  <li><strong>Binary Tree:</strong> Each node has at most <strong>2 children</strong> (left, right)</li>
+  <li><strong>BST:</strong> Binary tree where left &lt; parent &lt; right</li>
+</ul>
+<div class="visual">
+  <div class="visual-title">Binary Search Tree</div>
+  <div class="tree-vis">
+    <div class="tree-row"><div class="tree-nd root">8</div></div>
+    <div class="tree-branch"></div>
+    <div class="tree-row"><div class="tree-nd">3</div><div class="tree-nd">10</div></div>
+    <div class="tree-branch"></div>
+    <div class="tree-row"><div class="tree-nd">1</div><div class="tree-nd">6</div><div style="width:44px"></div><div class="tree-nd">14</div></div>
+  </div>
+  <p style="text-align:center;color:var(--emerald);font-weight:600;margin-top:10px">Left subtree &lt; Root &lt; Right subtree</p>
+</div>
+</div>
+
+<div class="topic-card"><span class="section-label">Implementation</span>
+<h2>🛠️ Binary Search Tree — Complete</h2>
+<div class="code-block"><div class="code-header"><div class="code-dots"><span></span><span></span><span></span></div><span class="code-filename">bst.py</span><button class="code-copy">Copy</button></div>
+<pre><code><span class="kw">class</span> <span class="fn">TreeNode</span>:
+    <span class="kw">def</span> <span class="fn">__init__</span>(self, val):
+        self.val = val
+        self.left = <span class="nu">None</span>
+        self.right = <span class="nu">None</span>
+
+<span class="kw">class</span> <span class="fn">BST</span>:
+    <span class="kw">def</span> <span class="fn">__init__</span>(self):
+        self.root = <span class="nu">None</span>
+
+    <span class="cm"># ─── Insert ───</span>
+    <span class="kw">def</span> <span class="fn">insert</span>(self, val):
+        self.root = self._insert(self.root, val)
+
+    <span class="kw">def</span> <span class="fn">_insert</span>(self, node, val):
+        <span class="kw">if</span> <span class="kw">not</span> node:
+            <span class="kw">return</span> TreeNode(val)
+        <span class="kw">if</span> val &lt; node.val:
+            node.left = self._insert(node.left, val)
+        <span class="kw">else</span>:
+            node.right = self._insert(node.right, val)
+        <span class="kw">return</span> node
+
+    <span class="cm"># ─── Search — O(log n) average ───</span>
+    <span class="kw">def</span> <span class="fn">search</span>(self, val):
+        <span class="kw">return</span> self._search(self.root, val)
+
+    <span class="kw">def</span> <span class="fn">_search</span>(self, node, val):
+        <span class="kw">if</span> <span class="kw">not</span> node <span class="kw">or</span> node.val == val:
+            <span class="kw">return</span> node
+        <span class="kw">if</span> val &lt; node.val:
+            <span class="kw">return</span> self._search(node.left, val)
+        <span class="kw">return</span> self._search(node.right, val)
+
+    <span class="cm"># ─── Traversals ───</span>
+    <span class="kw">def</span> <span class="fn">inorder</span>(self, node):
+        <span class="st">"""Left → Root → Right → SORTED output!"""</span>
+        <span class="kw">if</span> <span class="kw">not</span> node: <span class="kw">return</span> []
+        <span class="kw">return</span> self.inorder(node.left) + [node.val] + self.inorder(node.right)
+
+    <span class="kw">def</span> <span class="fn">preorder</span>(self, node):
+        <span class="st">"""Root → Left → Right"""</span>
+        <span class="kw">if</span> <span class="kw">not</span> node: <span class="kw">return</span> []
+        <span class="kw">return</span> [node.val] + self.preorder(node.left) + self.preorder(node.right)
+
+    <span class="kw">def</span> <span class="fn">postorder</span>(self, node):
+        <span class="st">"""Left → Right → Root"""</span>
+        <span class="kw">if</span> <span class="kw">not</span> node: <span class="kw">return</span> []
+        <span class="kw">return</span> self.postorder(node.left) + self.postorder(node.right) + [node.val]
+
+    <span class="kw">def</span> <span class="fn">level_order</span>(self):
+        <span class="st">"""BFS — level by level"""</span>
+        <span class="kw">if</span> <span class="kw">not</span> self.root: <span class="kw">return</span> []
+        <span class="kw">from</span> collections <span class="kw">import</span> deque
+        <span class="fn">queue</span> = deque([self.root])
+        <span class="fn">result</span> = []
+        <span class="kw">while</span> queue:
+            <span class="fn">node</span> = queue.popleft()
+            result.append(node.val)
+            <span class="kw">if</span> node.left: queue.append(node.left)
+            <span class="kw">if</span> node.right: queue.append(node.right)
+        <span class="kw">return</span> result
+
+    <span class="cm"># ─── Height ───</span>
+    <span class="kw">def</span> <span class="fn">height</span>(self, node):
+        <span class="kw">if</span> <span class="kw">not</span> node: <span class="kw">return</span> -<span class="nu">1</span>
+        <span class="kw">return</span> <span class="nu">1</span> + <span class="bi">max</span>(self.height(node.left), self.height(node.right))
+
+<span class="cm"># ─── Usage ───</span>
+<span class="fn">tree</span> = BST()
+<span class="kw">for</span> val <span class="kw">in</span> [<span class="nu">8</span>, <span class="nu">3</span>, <span class="nu">10</span>, <span class="nu">1</span>, <span class="nu">6</span>, <span class="nu">14</span>]:
+    tree.insert(val)
+
+<span class="bi">print</span>(<span class="st">"Inorder:  "</span>, tree.inorder(tree.root))    <span class="cm"># [1, 3, 6, 8, 10, 14]</span>
+<span class="bi">print</span>(<span class="st">"Preorder: "</span>, tree.preorder(tree.root))   <span class="cm"># [8, 3, 1, 6, 10, 14]</span>
+<span class="bi">print</span>(<span class="st">"Postorder:"</span>, tree.postorder(tree.root))  <span class="cm"># [1, 6, 3, 14, 10, 8]</span>
+<span class="bi">print</span>(<span class="st">"Level:    "</span>, tree.level_order())          <span class="cm"># [8, 3, 10, 1, 6, 14]</span>
+<span class="bi">print</span>(<span class="st">"Height:   "</span>, tree.height(tree.root))      <span class="cm"># 2</span></code></pre></div>
+</div>
+
+<div class="topic-card"><h2>⏱️ BST Time Complexity</h2>
+<div class="table-wrap"><table>
+<thead><tr><th>Operation</th><th>Average (balanced)</th><th>Worst (skewed)</th></tr></thead>
+<tbody>
+<tr><td>Search</td><td><code>O(log n)</code></td><td><code>O(n)</code></td></tr>
+<tr><td>Insert</td><td><code>O(log n)</code></td><td><code>O(n)</code></td></tr>
+<tr><td>Delete</td><td><code>O(log n)</code></td><td><code>O(n)</code></td></tr>
+<tr><td>Traversal</td><td><code>O(n)</code></td><td><code>O(n)</code></td></tr>
+</tbody></table></div>
+</div>
+
+<div class="page-nav">
+<a href="linked-lists.html"><span class="nav-label">← Previous</span><span class="nav-title">Linked Lists</span></a>
+<a href="graphs.html" class="next"><span class="nav-label">Next →</span><span class="nav-title">Graphs</span></a>
+</div>
+</main>
+<button id="btt" aria-label="Back to top">↑</button>
+<script src="script.js"></script>
+</body>
+</html>

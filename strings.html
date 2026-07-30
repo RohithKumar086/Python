@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>Strings — PyDSA</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="style.css"/>
+</head>
+<body>
+<nav class="navbar"><div class="nav-inner">
+  <a href="index.html" class="nav-brand"><span class="icon">⟨/⟩</span><span>PyDSA</span></a>
+  <ul class="nav-links" id="nav-links">
+    <li><a href="basics.html">Basics</a></li><li><a href="strings.html" class="active">Strings</a></li>
+    <li><a href="lists.html">Lists</a></li><li><a href="dictionaries.html">Dicts</a></li>
+    <li><a href="stacks-queues.html">Stacks</a></li><li><a href="linked-lists.html">LinkedList</a></li>
+    <li><a href="trees.html">Trees</a></li><li><a href="sorting.html">Sorting</a></li>
+    <li><a href="recursion.html">Recursion</a></li>
+  </ul>
+  <button class="nav-toggle" id="nav-toggle" aria-label="Menu"><span></span><span></span><span></span></button>
+</div></nav>
+
+<header class="page-hero">
+  <span class="emoji">🔤</span>
+  <h1>Strings</h1>
+  <p>Immutable sequences of characters — indexing, slicing, methods, formatting, step-by-step execution traces, and interview patterns.</p>
+</header>
+<div class="breadcrumb"><a href="index.html">Home</a><span>›</span>Strings</div>
+<main class="content">
+
+<!-- ════ WHEN TO USE & QUESTIONS SOLVED ════ -->
+<div class="topic-card" style="border-left:4px solid var(--accent)">
+  <span class="section-label">Interview Applications</span>
+  <h2>🎯 What Problems Are Solved Using Strings?</h2>
+  <p>String manipulation is tested in almost every coding interview. Key patterns include:</p>
+  
+  <div class="table-wrap"><table>
+    <thead><tr><th>Problem Pattern</th><th>Key Technique</th><th>Top LeetCode / Interview Questions</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Palindrome Check</strong></td><td>Two Pointers (left & right) or Slicing <code>s[::-1]</code></td><td>Valid Palindrome (#125), Longest Palindromic Substring (#5)</td></tr>
+      <tr><td><strong>Anagram Check</strong></td><td>Frequency Counting with <code>Counter</code> or Hash Map</td><td>Valid Anagram (#242), Group Anagrams (#49)</td></tr>
+      <tr><td><strong>Substring Search</strong></td><td>Sliding Window technique or <code>KMP</code> / Rolling Hash</td><td>Longest Substring Without Repeating Characters (#3), Find All Anagrams (#438)</td></tr>
+      <tr><td><strong>String Parsing / Editing</strong></td><td>Stack, Two Pointers, or Regular Expressions</td><td>Reverse Words in a String (#151), String to Integer atoi (#8)</td></tr>
+      <tr><td><strong>Prefix / Pattern Matching</strong></td><td>Trie (Prefix Tree) or <code>startswith()</code></td><td>Longest Common Prefix (#14), Implement Trie (#208)</td></tr>
+    </tbody>
+  </table></div>
+</div>
+
+<!-- ════ CREATION ════ -->
+<div class="topic-card">
+  <span class="section-label">Basics</span>
+  <h2>🔤 Creating & Properties of Strings</h2>
+  <p>Strings are <strong>immutable</strong> — once created, individual characters cannot be changed in place. Modifying a string creates a <em>new</em> string object in memory.</p>
+  <div class="code-block"><div class="code-header"><div class="code-dots"><span></span><span></span><span></span></div><span class="code-filename">creating_strings.py</span><button class="code-copy">Copy</button></div>
+<pre><code><span class="cm"># Creating strings</span>
+<span class="fn">s1</span> = <span class="st">"Hello"</span>              <span class="cm"># double quotes</span>
+<span class="fn">s2</span> = <span class="st">'Hello'</span>              <span class="cm"># single quotes (identical)</span>
+<span class="fn">s3</span> = <span class="st">"""Multi-line
+string here"""</span>                <span class="cm"># triple quotes</span>
+
+<span class="fn">s4</span> = <span class="st">r"C:\Users\new"</span>     <span class="cm"># raw string — backslashes are literal</span>
+<span class="fn">s5</span> = <span class="st">"Hello"</span> + <span class="st">" World"</span>  <span class="cm"># concatenation</span>
+<span class="fn">s6</span> = <span class="st">"Ha"</span> * <span class="nu">3</span>            <span class="cm"># repetition → "HaHaHa"</span>
+
+<span class="cm"># Length</span>
+<span class="bi">print</span>(<span class="bi">len</span>(<span class="st">"Python"</span>))     <span class="cm"># 6</span></code></pre></div>
+</div>
+
+<!-- ════ INDEXING & SLICING ════ -->
+<div class="topic-card">
+  <span class="section-label">Accessing</span>
+  <h2>📍 Indexing & Slicing Visualized</h2>
+  <p>Extract characters using zero-based indexing <code>s[i]</code> or range slices <code>s[start:stop:step]</code>.</p>
+
+  <div class="visual">
+    <div class="visual-title">String Indexing — "PYTHON"</div>
+    <div class="idx-row">
+      <span class="idx-label">Index:</span>
+      <span class="idx-cell">0</span><span class="idx-cell">1</span><span class="idx-cell">2</span><span class="idx-cell">3</span><span class="idx-cell">4</span><span class="idx-cell">5</span>
+    </div>
+    <div class="idx-row">
+      <span class="idx-label">Character:</span>
+      <span class="idx-cell ch">P</span><span class="idx-cell ch">Y</span><span class="idx-cell ch">T</span><span class="idx-cell ch">H</span><span class="idx-cell ch">O</span><span class="idx-cell ch">N</span>
+    </div>
+    <div class="idx-row">
+      <span class="idx-label">Negative:</span>
+      <span class="idx-cell neg">-6</span><span class="idx-cell neg">-5</span><span class="idx-cell neg">-4</span><span class="idx-cell neg">-3</span><span class="idx-cell neg">-2</span><span class="idx-cell neg">-1</span>
+    </div>
+  </div>
+
+  <div class="code-block"><div class="code-header"><div class="code-dots"><span></span><span></span><span></span></div><span class="code-filename">slicing.py</span><button class="code-copy">Copy</button></div>
+<pre><code><span class="fn">s</span> = <span class="st">"PYTHON"</span>
+
+<span class="bi">print</span>(s[<span class="nu">0</span>:<span class="nu">3</span>])     <span class="cm"># PYT   (index 0, 1, 2)</span>
+<span class="bi">print</span>(s[<span class="nu">2</span>:])      <span class="cm"># THON  (index 2 to end)</span>
+<span class="bi">print</span>(s[::-<span class="nu">1</span>])    <span class="cm"># NOHTYP (reversed)</span></code></pre></div>
+</div>
+
+<!-- ════ STEP-BY-STEP ALGORITHM TRACING ════ -->
+<div class="topic-card">
+  <span class="section-label">Detailed Execution Trace</span>
+  <h2>🔍 Step-by-Step Algorithm Tracing</h2>
+
+  <h3>Trace 1: Palindrome Check with Two Pointers</h3>
+  <p>Checking if <code>s = "racecar"</code> is a palindrome by moving <code>left</code> and <code>right</code> pointers inwards:</p>
+
+  <div class="table-wrap"><table>
+    <thead><tr><th>Step</th><th>Left Index (val)</th><th>Right Index (val)</th><th>Comparison</th><th>Action / Result</th></tr></thead>
+    <tbody>
+      <tr><td>1</td><td>0 (<code>'r'</code>)</td><td>6 (<code>'r'</code>)</td><td><code>'r' == 'r'</code> ✅ Match</td><td>Advance: left → 1, right → 5</td></tr>
+      <tr><td>2</td><td>1 (<code>'a'</code>)</td><td>5 (<code>'a'</code>)</td><td><code>'a' == 'a'</code> ✅ Match</td><td>Advance: left → 2, right → 4</td></tr>
+      <tr><td>3</td><td>2 (<code>'c'</code>)</td><td>4 (<code>'c'</code>)</td><td><code>'c' == 'c'</code> ✅ Match</td><td>Advance: left → 3, right → 3</td></tr>
+      <tr><td>4</td><td>3 (<code>'e'</code>)</td><td>3 (<code>'e'</code>)</td><td><code>left == right</code> (Pointers met)</td><td>Loop ends → <strong>Returns True</strong></td></tr>
+    </tbody>
+  </table></div>
+
+  <h3>Trace 2: Character Frequency Count</h3>
+  <p>Tracing <code>Counter("abracadabra")</code> or dictionary frequency counting:</p>
+
+  <div class="table-wrap"><table>
+    <thead><tr><th>Char Index</th><th>Current Char</th><th>Dict State before step</th><th>Dict State after step</th></tr></thead>
+    <tbody>
+      <tr><td>0</td><td><code>'a'</code></td><td><code>{}</code></td><td><code>{'a': 1}</code></td></tr>
+      <tr><td>1</td><td><code>'b'</code></td><td><code>{'a': 1}</code></td><td><code>{'a': 1, 'b': 1}</code></td></tr>
+      <tr><td>2</td><td><code>'r'</code></td><td><code>{'a': 1, 'b': 1}</code></td><td><code>{'a': 1, 'b': 1, 'r': 1}</code></td></tr>
+      <tr><td>3</td><td><code>'a'</code></td><td><code>{'a': 1, 'b': 1, 'r': 1}</code></td><td><code>{'a': 2, 'b': 1, 'r': 1}</code></td></tr>
+      <tr><td>4</td><td><code>'c'</code></td><td><code>{'a': 2, ...}</code></td><td><code>{'a': 2, 'b': 1, 'r': 1, 'c': 1}</code></td></tr>
+      <tr><td>5..10</td><td><code>'adabra'</code></td><td>...</td><td><code>{'a': 5, 'b': 2, 'r': 2, 'c': 1, 'd': 1}</code></td></tr>
+    </tbody>
+  </table></div>
+</div>
+
+<!-- ════ DSA CODE PATTERNS ════ -->
+<div class="topic-card">
+  <span class="section-label">Code Solutions</span>
+  <h2>💻 Complete Working Solutions</h2>
+
+  <h3>1. Valid Palindrome</h3>
+  <div class="code-block"><div class="code-header"><div class="code-dots"><span></span><span></span><span></span></div><span class="code-filename">valid_palindrome.py</span><button class="code-copy">Copy</button></div>
+<pre><code><span class="kw">def</span> <span class="fn">is_palindrome</span>(s: <span class="bi">str</span>) -> <span class="bi">bool</span>:
+    <span class="fn">clean</span> = [c.lower() <span class="kw">for</span> c <span class="kw">in</span> s <span class="kw">if</span> c.isalnum()]
+    <span class="fn">left</span>, <span class="fn">right</span> = <span class="nu">0</span>, <span class="bi">len</span>(clean) - <span class="nu">1</span>
+    <span class="kw">while</span> left &lt; right:
+        <span class="kw">if</span> clean[left] != clean[right]:
+            <span class="kw">return</span> <span class="nu">False</span>
+        left += <span class="nu">1</span>
+        right -= <span class="nu">1</span>
+    <span class="kw">return</span> <span class="nu">True</span>
+
+<span class="bi">print</span>(<span class="fn">is_palindrome</span>(<span class="st">"A man, a plan, a canal: Panama"</span>))  <span class="cm"># True</span></code></pre></div>
+
+  <h3>2. Valid Anagram</h3>
+  <div class="code-block"><div class="code-header"><div class="code-dots"><span></span><span></span><span></span></div><span class="code-filename">valid_anagram.py</span><button class="code-copy">Copy</button></div>
+<pre><code><span class="kw">from</span> collections <span class="kw">import</span> Counter
+
+<span class="kw">def</span> <span class="fn">is_anagram</span>(s: <span class="bi">str</span>, t: <span class="bi">str</span>) -> <span class="bi">bool</span>:
+    <span class="kw">return</span> Counter(s) == Counter(t)
+
+<span class="bi">print</span>(<span class="fn">is_anagram</span>(<span class="st">"anagram"</span>, <span class="st">"nagaram"</span>))  <span class="cm"># True</span></code></pre></div>
+</div>
+
+<div class="page-nav">
+  <a href="basics.html"><span class="nav-label">← Previous</span><span class="nav-title">Python Basics</span></a>
+  <a href="lists.html" class="next"><span class="nav-label">Next →</span><span class="nav-title">Lists</span></a>
+</div>
+</main>
+<button id="btt" aria-label="Back to top">↑</button>
+<script src="script.js"></script>
+</body>
+</html>

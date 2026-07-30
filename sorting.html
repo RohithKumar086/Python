@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>Sorting Algorithms — PyDSA</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="style.css"/>
+</head>
+<body>
+<nav class="navbar"><div class="nav-inner"><a href="index.html" class="nav-brand"><span class="icon">⟨/⟩</span><span>PyDSA</span></a><ul class="nav-links" id="nav-links"><li><a href="basics.html">Basics</a></li><li><a href="strings.html">Strings</a></li><li><a href="lists.html">Lists</a></li><li><a href="dictionaries.html">Dicts</a></li><li><a href="stacks-queues.html">Stacks</a></li><li><a href="linked-lists.html">LinkedList</a></li><li><a href="trees.html">Trees</a></li><li><a href="sorting.html" class="active">Sorting</a></li><li><a href="recursion.html">Recursion</a></li></ul><button class="nav-toggle" id="nav-toggle" aria-label="Menu"><span></span><span></span><span></span></button></div></nav>
+<header class="page-hero"><span class="emoji">📶</span><h1>Sorting Algorithms</h1><p>Comparison of sorting methods — Bubble, Selection, Insertion, Merge, Quick Sort, and Timsort with interactive step tracer.</p></header>
+<div class="breadcrumb"><a href="index.html">Home</a><span>›</span>Sorting</div>
+<main class="content">
+
+<!-- ════ WHEN TO USE & QUESTIONS SOLVED ════ -->
+<div class="topic-card" style="border-left:4px solid var(--accent)">
+  <span class="section-label">Interview Applications</span>
+  <h2>🎯 What Problems Are Solved Using Sorting?</h2>
+  
+  <div class="table-wrap"><table>
+    <thead><tr><th>Pattern</th><th>Key Indicator</th><th>Top LeetCode / Interview Questions</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Custom Sort Key</strong></td><td>Sorting intervals, strings, or complex objects</td><td>Merge Intervals (#56), Reorder Log Files (#937), Custom Sort String (#791)</td></tr>
+      <tr><td><strong>K-th Element / Top K</strong></td><td>Find K-th largest or smallest element</td><td>Kth Largest Element (#215), Top K Frequent Elements (#347)</td></tr>
+      <tr><td><strong>Sort + Two Pointers</strong></td><td>Finding pairs/triplets that satisfy sum constraints</td><td>3Sum (#15), 4Sum (#18), Sort Colors (#75)</td></tr>
+    </tbody>
+  </table></div>
+</div>
+
+<!-- ════ INTERACTIVE SORTING STEP TRACER ════ -->
+<div class="topic-card">
+  <span class="section-label">Interactive Simulation</span>
+  <h2>🎮 Interactive Bubble Sort Step Tracer</h2>
+  <p>Step through Bubble Sort execution on <code>[64, 34, 25, 12, 22, 11]</code> step-by-step!</p>
+  <div id="sorting-tracer"></div>
+</div>
+
+<!-- ════ STEP-BY-STEP TRACE TABLES ════ -->
+<div class="topic-card">
+  <span class="section-label">Detailed Execution Trace</span>
+  <h2>🔍 Step-by-Step Algorithm Execution Trace</h2>
+
+  <h3>Trace: Bubble Sort Pass 1 on <code>[5, 1, 4, 2, 8]</code></h3>
+  
+  <div class="table-wrap"><table>
+    <thead><tr><th>Sub-Step</th><th>j Index</th><th>Compare Elements</th><th>Condition (arr[j] > arr[j+1])</th><th>Action Taken</th><th>Array State After Step</th></tr></thead>
+    <tbody>
+      <tr><td>1.1</td><td>0</td><td><code>5</code> vs <code>1</code></td><td><code>5 > 1</code> (True)</td><td>Swap 5 and 1</td><td><code>[1, 5, 4, 2, 8]</code></td></tr>
+      <tr><td>1.2</td><td>1</td><td><code>5</code> vs <code>4</code></td><td><code>5 > 4</code> (True)</td><td>Swap 5 and 4</td><td><code>[1, 4, 5, 2, 8]</code></td></tr>
+      <tr><td>1.3</td><td>2</td><td><code>5</code> vs <code>2</code></td><td><code>5 > 2</code> (True)</td><td>Swap 5 and 2</td><td><code>[1, 4, 2, 5, 8]</code></td></tr>
+      <tr><td>1.4</td><td>3</td><td><code>5</code> vs <code>8</code></td><td><code>5 > 8</code> (False)</td><td>No swap</td><td><code>[1, 4, 2, 5, 8]</code></td></tr>
+      <tr><td>Pass 1 End</td><td>-</td><td>-</td><td>-</td><td>8 is now in final position!</td><td><code>[1, 4, 2, 5, 8]</code></td></tr>
+    </tbody>
+  </table></div>
+</div>
+
+<!-- ════ ALGORITHM IMPLEMENTATIONS ════ -->
+<div class="topic-card"><span class="section-label">Implementations</span>
+<h2>💻 Algorithm Implementations</h2>
+
+<div class="algo-tabs">
+  <button class="algo-tab active" data-tab="bubble">Bubble Sort</button>
+  <button class="algo-tab" data-tab="selection">Selection Sort</button>
+  <button class="algo-tab" data-tab="insertion">Insertion Sort</button>
+  <button class="algo-tab" data-tab="merge">Merge Sort</button>
+  <button class="algo-tab" data-tab="quick">Quick Sort</button>
+</div>
+
+<!-- Bubble -->
+<div class="algo-content active" id="tab-bubble">
+  <p>Repeatedly swaps adjacent elements if they are in wrong order. Largest element "bubbles" to the top in each pass.</p>
+  <div class="code-block"><div class="code-header"><div class="code-dots"><span></span><span></span><span></span></div><span class="code-filename">bubble_sort.py</span><button class="code-copy">Copy</button></div>
+<pre><code><span class="kw">def</span> <span class="fn">bubble_sort</span>(arr):
+    <span class="fn">n</span> = <span class="bi">len</span>(arr)
+    <span class="kw">for</span> i <span class="kw">in</span> <span class="bi">range</span>(n):
+        <span class="fn">swapped</span> = <span class="nu">False</span>
+        <span class="kw">for</span> j <span class="kw">in</span> <span class="bi">range</span>(<span class="nu">0</span>, n - i - <span class="nu">1</span>):
+            <span class="kw">if</span> arr[j] &gt; arr[j + <span class="nu">1</span>]:
+                arr[j], arr[j + <span class="nu">1</span>] = arr[j + <span class="nu">1</span>], arr[j]
+                swapped = <span class="nu">True</span>
+        <span class="kw">if</span> <span class="kw">not</span> swapped: <span class="kw">break</span>
+    <span class="kw">return</span> arr
+
+<span class="bi">print</span>(<span class="fn">bubble_sort</span>([<span class="nu">64</span>, <span class="nu">34</span>, <span class="nu">25</span>, <span class="nu">12</span>, <span class="nu">22</span>, <span class="nu">11</span>, <span class="nu">90</span>]))</code></pre></div>
+</div>
+
+<!-- Selection -->
+<div class="algo-content" id="tab-selection">
+  <p>Repeatedly finds the minimum element from the unsorted part and puts it at the beginning.</p>
+  <div class="code-block"><div class="code-header"><div class="code-dots"><span></span><span></span><span></span></div><span class="code-filename">selection_sort.py</span><button class="code-copy">Copy</button></div>
+<pre><code><span class="kw">def</span> <span class="fn">selection_sort</span>(arr):
+    <span class="fn">n</span> = <span class="bi">len</span>(arr)
+    <span class="kw">for</span> i <span class="kw">in</span> <span class="bi">range</span>(n):
+        <span class="fn">min_idx</span> = i
+        <span class="kw">for</span> j <span class="kw">in</span> <span class="bi">range</span>(i + <span class="nu">1</span>, n):
+            <span class="kw">if</span> arr[j] &lt; arr[min_idx]:
+                min_idx = j
+        arr[i], arr[min_idx] = arr[min_idx], arr[i]
+    <span class="kw">return</span> arr
+
+<span class="bi">print</span>(<span class="fn">selection_sort</span>([<span class="nu">64</span>, <span class="nu">25</span>, <span class="nu">12</span>, <span class="nu">22</span>, <span class="nu">11</span>]))</code></pre></div>
+</div>
+
+<!-- Insertion -->
+<div class="algo-content" id="tab-insertion">
+  <p>Builds the sorted array one item at a time by inserting elements into their correct position.</p>
+  <div class="code-block"><div class="code-header"><div class="code-dots"><span></span><span></span><span></span></div><span class="code-filename">insertion_sort.py</span><button class="code-copy">Copy</button></div>
+<pre><code><span class="kw">def</span> <span class="fn">insertion_sort</span>(arr):
+    <span class="kw">for</span> i <span class="kw">in</span> <span class="bi">range</span>(<span class="nu">1</span>, <span class="bi">len</span>(arr)):
+        <span class="fn">key</span> = arr[i]
+        <span class="fn">j</span> = i - <span class="nu">1</span>
+        <span class="kw">while</span> j &gt;= <span class="nu">0</span> <span class="kw">and</span> arr[j] &gt; key:
+            arr[j + <span class="nu">1</span>] = arr[j]
+            j -= <span class="nu">1</span>
+        arr[j + <span class="nu">1</span>] = key
+    <span class="kw">return</span> arr
+
+<span class="bi">print</span>(<span class="fn">insertion_sort</span>([<span class="nu">12</span>, <span class="nu">11</span>, <span class="nu">13</span>, <span class="nu">5</span>, <span class="nu">6</span>]))</code></pre></div>
+</div>
+
+<!-- Merge -->
+<div class="algo-content" id="tab-merge">
+  <p>Divide and Conquer algorithm. Splits array in half, recursively sorts both halves, and merges them.</p>
+  <div class="code-block"><div class="code-header"><div class="code-dots"><span></span><span></span><span></span></div><span class="code-filename">merge_sort.py</span><button class="code-copy">Copy</button></div>
+<pre><code><span class="kw">def</span> <span class="fn">merge_sort</span>(arr):
+    <span class="kw">if</span> <span class="bi">len</span>(arr) &lt;= <span class="nu">1</span>: <span class="kw">return</span> arr
+    <span class="fn">mid</span> = <span class="bi">len</span>(arr) // <span class="nu">2</span>
+    <span class="fn">left</span> = merge_sort(arr[:mid])
+    <span class="fn">right</span> = merge_sort(arr[mid:])
+    <span class="kw">return</span> merge(left, right)
+
+<span class="kw">def</span> <span class="fn">merge</span>(left, right):
+    <span class="fn">result</span> = []
+    <span class="fn">i</span> = <span class="fn">j</span> = <span class="nu">0</span>
+    <span class="kw">while</span> i &lt; <span class="bi">len</span>(left) <span class="kw">and</span> j &lt; <span class="bi">len</span>(right):
+        <span class="kw">if</span> left[i] &lt;= right[j]:
+            result.append(left[i]); i += <span class="nu">1</span>
+        <span class="kw">else</span>:
+            result.append(right[j]); j += <span class="nu">1</span>
+    result.extend(left[i:])
+    result.extend(right[j:])
+    <span class="kw">return</span> result
+
+<span class="bi">print</span>(<span class="fn">merge_sort</span>([<span class="nu">38</span>, <span class="nu">27</span>, <span class="nu">43</span>, <span class="nu">3</span>, <span class="nu">9</span>, <span class="nu">82</span>, <span class="nu">10</span>]))</code></pre></div>
+</div>
+
+<!-- Quick -->
+<div class="algo-content" id="tab-quick">
+  <p>Picks a 'pivot' element, partitions array such that elements &lt; pivot are left and &gt; pivot are right, then recurses.</p>
+  <div class="code-block"><div class="code-header"><div class="code-dots"><span></span><span></span><span></span></div><span class="code-filename">quick_sort.py</span><button class="code-copy">Copy</button></div>
+<pre><code><span class="kw">def</span> <span class="fn">quick_sort</span>(arr):
+    <span class="kw">if</span> <span class="bi">len</span>(arr) &lt;= <span class="nu">1</span>: <span class="kw">return</span> arr
+    <span class="fn">pivot</span> = arr[<span class="bi">len</span>(arr) // <span class="nu">2</span>]
+    <span class="fn">left</span> = [x <span class="kw">for</span> x <span class="kw">in</span> arr <span class="kw">if</span> x &lt; pivot]
+    <span class="fn">middle</span> = [x <span class="kw">for</span> x <span class="kw">in</span> arr <span class="kw">if</span> x == pivot]
+    <span class="fn">right</span> = [x <span class="kw">for</span> x <span class="kw">in</span> arr <span class="kw">if</span> x &gt; pivot]
+    <span class="kw">return</span> quick_sort(left) + middle + quick_sort(right)
+
+<span class="bi">print</span>(<span class="fn">quick_sort</span>([<span class="nu">10</span>, <span class="nu">7</span>, <span class="nu">8</span>, <span class="nu">9</span>, <span class="nu">1</span>, <span class="nu">5</span>]))</code></pre></div>
+</div>
+
+</div>
+
+<div class="page-nav">
+<a href="searching.html"><span class="nav-label">← Previous</span><span class="nav-title">Searching</span></a>
+<a href="complexity.html" class="next"><span class="nav-label">Next →</span><span class="nav-title">Big O Notation</span></a>
+</div>
+</main>
+<button id="btt" aria-label="Back to top">↑</button>
+<script src="script.js"></script>
+</body>
+</html>

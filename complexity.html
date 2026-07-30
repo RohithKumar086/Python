@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>Big O Notation — PyDSA</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="style.css"/>
+</head>
+<body>
+<nav class="navbar"><div class="nav-inner"><a href="index.html" class="nav-brand"><span class="icon">⟨/⟩</span><span>PyDSA</span></a><ul class="nav-links" id="nav-links"><li><a href="basics.html">Basics</a></li><li><a href="strings.html">Strings</a></li><li><a href="lists.html">Lists</a></li><li><a href="dictionaries.html">Dicts</a></li><li><a href="stacks-queues.html">Stacks</a></li><li><a href="linked-lists.html">LinkedList</a></li><li><a href="trees.html">Trees</a></li><li><a href="sorting.html">Sorting</a></li><li><a href="recursion.html">Recursion</a></li></ul><button class="nav-toggle" id="nav-toggle" aria-label="Menu"><span></span><span></span><span></span></button></div></nav>
+<header class="page-hero"><span class="emoji">📈</span><h1>Big O Notation</h1><p>Analyzing time and space complexity — essential for technical interview discussions.</p></header>
+<div class="breadcrumb"><a href="index.html">Home</a><span>›</span>Big O Notation</div>
+<main class="content">
+
+<div class="topic-card"><span class="section-label">Concept</span>
+<h2>📈 What is Big O Notation?</h2>
+<p>Big O notation measures how the runtime or memory requirements of an algorithm grow as the input size (<code>n</code>) grows towards infinity.</p>
+
+<div class="table-wrap"><table>
+<thead><tr><th>Notation</th><th>Name</th><th>Example Operation</th></tr></thead>
+<tbody>
+<tr><td><code>O(1)</code></td><td>Constant</td><td>Access list index, Dict lookup</td></tr>
+<tr><td><code>O(log n)</code></td><td>Logarithmic</td><td>Binary search, BST search</td></tr>
+<tr><td><code>O(n)</code></td><td>Linear</td><td>Loop through list, String search</td></tr>
+<tr><td><code>O(n log n)</code></td><td>Linearithmic</td><td>Merge Sort, Quick Sort (avg), Timsort</td></tr>
+<tr><td><code>O(n²)</code></td><td>Quadratic</td><td>Nested loops, Bubble Sort</td></tr>
+<tr><td><code>O(2^n)</code></td><td>Exponential</td><td>Recursive Fibonacci (naive)</td></tr>
+<tr><td><code>O(n!)</code></td><td>Factorial</td><td>Permutations of a string</td></tr>
+</tbody></table></div>
+</div>
+
+<div class="topic-card"><span class="section-label">Examples</span>
+<h2>💻 Code Examples of Each Complexity</h2>
+
+<h3>O(1) — Constant Time</h3>
+<div class="code-block"><div class="code-header"><div class="code-dots"><span></span><span></span><span></span></div><span class="code-filename">o_1.py</span><button class="code-copy">Copy</button></div>
+<pre><code><span class="kw">def</span> <span class="fn">get_first</span>(arr):
+    <span class="kw">return</span> arr[<span class="nu">0</span>]  <span class="cm"># Always 1 operation regardless of arr size</span></code></pre></div>
+
+<h3>O(log n) — Logarithmic Time</h3>
+<div class="code-block"><div class="code-header"><div class="code-dots"><span></span><span></span><span></span></div><span class="code-filename">o_logn.py</span><button class="code-copy">Copy</button></div>
+<pre><code><span class="kw">def</span> <span class="fn">binary_search</span>(arr, target):
+    <span class="fn">low</span>, <span class="fn">high</span> = <span class="nu">0</span>, <span class="bi">len</span>(arr) - <span class="nu">1</span>
+    <span class="kw">while</span> low &lt;= high:
+        <span class="fn">mid</span> = (low + high) // <span class="nu">2</span>
+        <span class="kw">if</span> arr[mid] == target: <span class="kw">return</span> mid
+        <span class="kw">elif</span> arr[mid] &lt; target: low = mid + <span class="nu">1</span>
+        <span class="kw">else</span>: high = mid - <span class="nu">1</span>
+    <span class="kw">return</span> -<span class="nu">1</span></code></pre></div>
+
+<h3>O(n) — Linear Time</h3>
+<div class="code-block"><div class="code-header"><div class="code-dots"><span></span><span></span><span></span></div><span class="code-filename">o_n.py</span><button class="code-copy">Copy</button></div>
+<pre><code><span class="kw">def</span> <span class="fn">sum_list</span>(arr):
+    <span class="fn">total</span> = <span class="nu">0</span>
+    <span class="kw">for</span> x <span class="kw">in</span> arr:  <span class="cm"># Runs n times</span>
+        total += x
+    <span class="kw">return</span> total</code></pre></div>
+
+<h3>O(n²) — Quadratic Time</h3>
+<div class="code-block"><div class="code-header"><div class="code-dots"><span></span><span></span><span></span></div><span class="code-filename">o_n2.py</span><button class="code-copy">Copy</button></div>
+<pre><code><span class="kw">def</span> <span class="fn">print_pairs</span>(arr):
+    <span class="kw">for</span> i <span class="kw">in</span> arr:       <span class="cm"># n times</span>
+        <span class="kw">for</span> j <span class="kw">in</span> arr:   <span class="cm"># n times</span>
+            <span class="bi">print</span>(i, j)  <span class="cm"># Total n * n operations</span></code></pre></div>
+</div>
+
+<div class="topic-card"><span class="section-label">Rules</span>
+<h2>📜 Big O Simplification Rules</h2>
+<ol>
+  <li><strong>Drop Constants:</strong> <code>O(2n)</code> → <code>O(n)</code>. <code>O(500)</code> → <code>O(1)</code>.</li>
+  <li><strong>Drop Non-Dominant Terms:</strong> <code>O(n² + n)</code> → <code>O(n²)</code>. <code>O(n + log n)</code> → <code>O(n)</code>.</li>
+  <li><strong>Different Inputs Get Different Variables:</strong> Two separate arrays <code>A</code> and <code>B</code> in sequence → <code>O(a + b)</code>. Nested loops over <code>A</code> and <code>B</code> → <code>O(a * b)</code>.</li>
+</ol>
+</div>
+
+<div class="page-nav">
+<a href="sorting.html"><span class="nav-label">← Previous</span><span class="nav-title">Sorting</span></a>
+<a href="roadmap.html" class="next"><span class="nav-label">Next →</span><span class="nav-title">DSA Roadmap</span></a>
+</div>
+</main>
+<button id="btt" aria-label="Back to top">↑</button>
+<script src="script.js"></script>
+</body>
+</html>

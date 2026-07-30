@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>Dictionaries — PyDSA</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="style.css"/>
+</head>
+<body>
+<nav class="navbar"><div class="nav-inner">
+  <a href="index.html" class="nav-brand"><span class="icon">⟨/⟩</span><span>PyDSA</span></a>
+  <ul class="nav-links" id="nav-links">
+    <li><a href="basics.html">Basics</a></li><li><a href="strings.html">Strings</a></li>
+    <li><a href="lists.html">Lists</a></li><li><a href="dictionaries.html" class="active">Dicts</a></li>
+    <li><a href="stacks-queues.html">Stacks</a></li><li><a href="linked-lists.html">LinkedList</a></li>
+    <li><a href="trees.html">Trees</a></li><li><a href="sorting.html">Sorting</a></li>
+    <li><a href="recursion.html">Recursion</a></li>
+  </ul>
+  <button class="nav-toggle" id="nav-toggle" aria-label="Menu"><span></span><span></span><span></span></button>
+</div></nav>
+<header class="page-hero"><span class="emoji">🗂️</span><h1>Dictionaries</h1><p>Hash maps with O(1) lookups — the most important data structure for coding interviews.</p></header>
+<div class="breadcrumb"><a href="index.html">Home</a><span>›</span>Dictionaries</div>
+<main class="content">
+
+<div class="topic-card">
+  <span class="section-label">How It Works</span>
+  <h2>🗂️ What is a Dictionary?</h2>
+  <p>A dictionary stores <strong>key-value pairs</strong>. Internally it uses a <strong>hash table</strong> — the key is hashed to find a bucket, giving O(1) average-case access.</p>
+  <div class="visual">
+    <div class="visual-title">How a Hash Map Works</div>
+    <div class="hash-row"><span class="hash-key">key: "apple"</span><span class="hash-arrow">→ hash()</span><span class="hash-bucket">bucket[3]</span><span class="hash-arrow">→</span><span class="hash-val">value: 2</span></div>
+    <div class="hash-row"><span class="hash-key">key: "banana"</span><span class="hash-arrow">→ hash()</span><span class="hash-bucket">bucket[7]</span><span class="hash-arrow">→</span><span class="hash-val">value: 5</span></div>
+    <div class="hash-row"><span class="hash-key">key: "cherry"</span><span class="hash-arrow">→ hash()</span><span class="hash-bucket">bucket[1]</span><span class="hash-arrow">→</span><span class="hash-val">value: 8</span></div>
+  </div>
+  <div class="info-box info-note"><span class="icon">📝</span><p>Keys must be <strong>immutable</strong> (str, int, tuple). Values can be anything. Keys must be <strong>unique</strong> — assigning to an existing key overwrites the value.</p></div>
+</div>
+
+<div class="topic-card">
+  <span class="section-label">Creating & Accessing</span>
+  <h2>🔨 Creating & Accessing Dictionaries</h2>
+  <div class="code-block"><div class="code-header"><div class="code-dots"><span></span><span></span><span></span></div><span class="code-filename">dict_basics.py</span><button class="code-copy">Copy</button></div>
+<pre><code><span class="cm"># Creating dictionaries</span>
+<span class="fn">student</span> = {
+    <span class="st">"name"</span>: <span class="st">"Rohith"</span>,
+    <span class="st">"age"</span>: <span class="nu">21</span>,
+    <span class="st">"courses"</span>: [<span class="st">"DSA"</span>, <span class="st">"Python"</span>],
+    <span class="st">"active"</span>: <span class="nu">True</span>
+}
+<span class="fn">empty</span> = {}
+<span class="fn">from_pairs</span> = <span class="bi">dict</span>([(<span class="st">"a"</span>, <span class="nu">1</span>), (<span class="st">"b"</span>, <span class="nu">2</span>)])  <span class="cm"># {'a': 1, 'b': 2}</span>
+<span class="fn">from_keys</span> = <span class="bi">dict</span>.fromkeys([<span class="st">"x"</span>,<span class="st">"y"</span>,<span class="st">"z"</span>], <span class="nu">0</span>)  <span class="cm"># {'x':0, 'y':0, 'z':0}</span>
+
+<span class="cm"># ─── Accessing values ───</span>
+<span class="bi">print</span>(student[<span class="st">"name"</span>])                <span class="cm"># Rohith</span>
+<span class="bi">print</span>(student.get(<span class="st">"name"</span>))            <span class="cm"># Rohith</span>
+<span class="bi">print</span>(student.get(<span class="st">"gpa"</span>, <span class="nu">0.0</span>))       <span class="cm"># 0.0  (default if key missing)</span>
+<span class="cm"># student["gpa"] would raise KeyError!</span>
+
+<span class="cm"># ─── Modifying ───</span>
+student[<span class="st">"age"</span>] = <span class="nu">22</span>                  <span class="cm"># update existing key</span>
+student[<span class="st">"email"</span>] = <span class="st">"r@mail.com"</span>     <span class="cm"># add new key</span>
+student.update({<span class="st">"gpa"</span>: <span class="nu">3.8</span>, <span class="st">"age"</span>: <span class="nu">23</span>})  <span class="cm"># update multiple</span>
+
+<span class="cm"># ─── Removing ───</span>
+<span class="kw">del</span> student[<span class="st">"email"</span>]                  <span class="cm"># delete key (KeyError if missing)</span>
+<span class="fn">val</span> = student.pop(<span class="st">"gpa"</span>)              <span class="cm"># remove & return value</span>
+<span class="fn">val</span> = student.pop(<span class="st">"xyz"</span>, <span class="nu">None</span>)        <span class="cm"># safe pop with default</span>
+<span class="fn">last</span> = student.popitem()              <span class="cm"># remove & return last pair</span>
+
+<span class="cm"># setdefault — get value, or set it if missing</span>
+student.setdefault(<span class="st">"country"</span>, <span class="st">"India"</span>)  <span class="cm"># adds "country":"India"</span></code></pre></div>
+</div>
+
+<div class="topic-card">
+  <span class="section-label">Iteration</span>
+  <h2>🔄 Iterating & Methods</h2>
+  <div class="code-block"><div class="code-header"><div class="code-dots"><span></span><span></span><span></span></div><span class="code-filename">dict_iteration.py</span><button class="code-copy">Copy</button></div>
+<pre><code><span class="fn">d</span> = {<span class="st">"a"</span>: <span class="nu">1</span>, <span class="st">"b"</span>: <span class="nu">2</span>, <span class="st">"c"</span>: <span class="nu">3</span>}
+
+<span class="cm"># Iterate over keys (default)</span>
+<span class="kw">for</span> key <span class="kw">in</span> d:
+    <span class="bi">print</span>(key, d[key])
+
+<span class="cm"># Iterate over key-value pairs (most common)</span>
+<span class="kw">for</span> key, val <span class="kw">in</span> d.items():
+    <span class="bi">print</span>(<span class="st">f"{key}: {val}"</span>)
+
+<span class="cm"># Just keys or values</span>
+<span class="bi">print</span>(<span class="bi">list</span>(d.keys()))    <span class="cm"># ['a', 'b', 'c']</span>
+<span class="bi">print</span>(<span class="bi">list</span>(d.values()))  <span class="cm"># [1, 2, 3]</span>
+<span class="bi">print</span>(<span class="bi">list</span>(d.items()))   <span class="cm"># [('a',1), ('b',2), ('c',3)]</span>
+
+<span class="cm"># Check if key exists</span>
+<span class="bi">print</span>(<span class="st">"a"</span> <span class="kw">in</span> d)         <span class="cm"># True</span>
+<span class="bi">print</span>(<span class="st">"x"</span> <span class="kw">in</span> d)         <span class="cm"># False</span>
+
+<span class="cm"># Dictionary comprehension</span>
+<span class="fn">squares</span> = {x: x**<span class="nu">2</span> <span class="kw">for</span> x <span class="kw">in</span> <span class="bi">range</span>(<span class="nu">1</span>, <span class="nu">6</span>)}
+<span class="cm"># {1: 1, 2: 4, 3: 9, 4: 16, 5: 25}</span>
+
+<span class="cm"># Invert a dictionary</span>
+<span class="fn">inverted</span> = {v: k <span class="kw">for</span> k, v <span class="kw">in</span> d.items()}
+<span class="cm"># {1: 'a', 2: 'b', 3: 'c'}</span></code></pre></div>
+</div>
+
+<div class="topic-card">
+  <span class="section-label">Collections Module</span>
+  <h2>🧰 defaultdict, Counter & OrderedDict</h2>
+  <div class="code-block"><div class="code-header"><div class="code-dots"><span></span><span></span><span></span></div><span class="code-filename">collections_dict.py</span><button class="code-copy">Copy</button></div>
+<pre><code><span class="kw">from</span> collections <span class="kw">import</span> defaultdict, Counter, OrderedDict
+
+<span class="cm"># ─── defaultdict — auto-creates missing keys ───</span>
+<span class="fn">dd</span> = defaultdict(<span class="bi">list</span>)
+<span class="fn">dd</span>[<span class="st">"fruits"</span>].append(<span class="st">"apple"</span>)     <span class="cm"># no KeyError!</span>
+<span class="fn">dd</span>[<span class="st">"fruits"</span>].append(<span class="st">"banana"</span>)
+<span class="bi">print</span>(dd)  <span class="cm"># {'fruits': ['apple', 'banana']}</span>
+
+<span class="fn">word_count</span> = defaultdict(<span class="bi">int</span>)
+<span class="kw">for</span> word <span class="kw">in</span> <span class="st">"the cat sat on the mat"</span>.split():
+    word_count[word] += <span class="nu">1</span>
+<span class="bi">print</span>(<span class="bi">dict</span>(word_count))
+<span class="cm"># {'the': 2, 'cat': 1, 'sat': 1, 'on': 1, 'mat': 1}</span>
+
+<span class="cm"># ─── Counter — count occurrences ───</span>
+<span class="fn">c</span> = Counter(<span class="st">"abracadabra"</span>)
+<span class="bi">print</span>(c)                    <span class="cm"># Counter({'a':5, 'b':2, 'r':2, 'c':1, 'd':1})</span>
+<span class="bi">print</span>(c.most_common(<span class="nu">2</span>))     <span class="cm"># [('a', 5), ('b', 2)]</span>
+<span class="bi">print</span>(c[<span class="st">"a"</span>])               <span class="cm"># 5</span>
+<span class="bi">print</span>(c[<span class="st">"z"</span>])               <span class="cm"># 0  (no KeyError!)</span>
+
+<span class="cm"># Counter arithmetic</span>
+<span class="fn">c1</span> = Counter(<span class="st">"aab"</span>)
+<span class="fn">c2</span> = Counter(<span class="st">"abb"</span>)
+<span class="bi">print</span>(c1 + c2)  <span class="cm"># Counter({'a': 3, 'b': 3})</span>
+<span class="bi">print</span>(c1 - c2)  <span class="cm"># Counter({'a': 1})</span></code></pre></div>
+</div>
+
+<div class="topic-card">
+  <span class="section-label">★ DSA Patterns</span>
+  <h2>🎯 Dictionary Patterns for DSA</h2>
+  <div class="code-block"><div class="code-header"><div class="code-dots"><span></span><span></span><span></span></div><span class="code-filename">dict_dsa.py</span><button class="code-copy">Copy</button></div>
+<pre><code><span class="cm"># ★ Two Sum (classic interview problem!)</span>
+<span class="kw">def</span> <span class="fn">two_sum</span>(nums, target):
+    <span class="fn">seen</span> = {}  <span class="cm"># value → index</span>
+    <span class="kw">for</span> i, num <span class="kw">in</span> <span class="bi">enumerate</span>(nums):
+        <span class="fn">complement</span> = target - num
+        <span class="kw">if</span> complement <span class="kw">in</span> seen:
+            <span class="kw">return</span> [seen[complement], i]
+        seen[num] = i
+    <span class="kw">return</span> []
+
+<span class="bi">print</span>(<span class="fn">two_sum</span>([<span class="nu">2</span>,<span class="nu">7</span>,<span class="nu">11</span>,<span class="nu">15</span>], <span class="nu">9</span>))  <span class="cm"># [0, 1]  (2+7=9)</span>
+
+<span class="cm"># ★ Group Anagrams</span>
+<span class="kw">def</span> <span class="fn">group_anagrams</span>(words):
+    <span class="fn">groups</span> = defaultdict(<span class="bi">list</span>)
+    <span class="kw">for</span> word <span class="kw">in</span> words:
+        <span class="fn">key</span> = <span class="bi">tuple</span>(<span class="bi">sorted</span>(word))
+        groups[key].append(word)
+    <span class="kw">return</span> <span class="bi">list</span>(groups.values())
+
+<span class="bi">print</span>(<span class="fn">group_anagrams</span>([<span class="st">"eat"</span>,<span class="st">"tea"</span>,<span class="st">"tan"</span>,<span class="st">"ate"</span>,<span class="st">"nat"</span>,<span class="st">"bat"</span>]))
+<span class="cm"># [['eat','tea','ate'], ['tan','nat'], ['bat']]</span>
+
+<span class="cm"># ★ Frequency Sort</span>
+<span class="kw">def</span> <span class="fn">freq_sort</span>(s):
+    <span class="fn">freq</span> = Counter(s)
+    <span class="kw">return</span> <span class="st">""</span>.join(c * n <span class="kw">for</span> c, n <span class="kw">in</span> freq.most_common())
+
+<span class="bi">print</span>(<span class="fn">freq_sort</span>(<span class="st">"tree"</span>))  <span class="cm"># "eert" or "eetr"</span></code></pre></div>
+</div>
+
+<div class="topic-card">
+  <h2>⏱️ Time Complexity</h2>
+  <div class="table-wrap"><table>
+    <thead><tr><th>Operation</th><th>Average</th><th>Worst</th></tr></thead>
+    <tbody>
+      <tr><td>Access <code>d[key]</code></td><td><code>O(1)</code></td><td><code>O(n)</code></td></tr>
+      <tr><td>Insert <code>d[key] = val</code></td><td><code>O(1)</code></td><td><code>O(n)</code></td></tr>
+      <tr><td>Delete <code>del d[key]</code></td><td><code>O(1)</code></td><td><code>O(n)</code></td></tr>
+      <tr><td>Search <code>key in d</code></td><td><code>O(1)</code></td><td><code>O(n)</code></td></tr>
+      <tr><td>Iterate</td><td><code>O(n)</code></td><td><code>O(n)</code></td></tr>
+    </tbody>
+  </table></div>
+</div>
+
+<div class="page-nav">
+  <a href="tuples-sets.html"><span class="nav-label">← Previous</span><span class="nav-title">Tuples & Sets</span></a>
+  <a href="stacks-queues.html" class="next"><span class="nav-label">Next →</span><span class="nav-title">Stacks & Queues</span></a>
+</div>
+</main>
+<button id="btt" aria-label="Back to top">↑</button>
+<script src="script.js"></script>
+</body>
+</html>

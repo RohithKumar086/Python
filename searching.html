@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>Searching Algorithms — PyDSA</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="style.css"/>
+</head>
+<body>
+<nav class="navbar"><div class="nav-inner"><a href="index.html" class="nav-brand"><span class="icon">⟨/⟩</span><span>PyDSA</span></a><ul class="nav-links" id="nav-links"><li><a href="basics.html">Basics</a></li><li><a href="strings.html">Strings</a></li><li><a href="lists.html">Lists</a></li><li><a href="dictionaries.html">Dicts</a></li><li><a href="stacks-queues.html">Stacks</a></li><li><a href="linked-lists.html">LinkedList</a></li><li><a href="trees.html">Trees</a></li><li><a href="sorting.html">Sorting</a></li><li><a href="recursion.html">Recursion</a></li></ul><button class="nav-toggle" id="nav-toggle" aria-label="Menu"><span></span><span></span><span></span></button></div></nav>
+<header class="page-hero"><span class="emoji">🔍</span><h1>Searching & Pointer Algorithms</h1><p>Linear search, Binary search, Two Pointers, and Sliding Window — complete with interactive step tracer and trace tables.</p></header>
+<div class="breadcrumb"><a href="index.html">Home</a><span>›</span>Searching</div>
+<main class="content">
+
+<!-- ════ WHEN TO USE & QUESTIONS SOLVED ════ -->
+<div class="topic-card" style="border-left:4px solid var(--accent)">
+  <span class="section-label">Interview Applications</span>
+  <h2>🎯 What Problems Are Solved Using Searching Algorithms?</h2>
+  
+  <div class="table-wrap"><table>
+    <thead><tr><th>Pattern</th><th>Key Indicator</th><th>Top LeetCode / Interview Questions</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Binary Search</strong></td><td>Searching in a <strong>sorted array</strong> or finding a boundary value</td><td>Binary Search (#704), Search in Rotated Sorted Array (#33), First/Last Position (#34)</td></tr>
+      <tr><td><strong>Binary Search on Answer</strong></td><td>"Find minimum maximum" or "Find smallest capacity"</td><td>Koko Eating Bananas (#875), Capacity To Ship Packages (#1011)</td></tr>
+      <tr><td><strong>Two Pointers</strong></td><td>Sorted array pair finding, container with most water</td><td>Two Sum II (#167), 3Sum (#15), Container With Most Water (#11)</td></tr>
+      <tr><td><strong>Sliding Window</strong></td><td>Contiguous subarray/substring with maximum/minimum/condition</td><td>Longest Substring Without Repeating (#3), Minimum Size Subarray Sum (#209)</td></tr>
+    </tbody>
+  </table></div>
+</div>
+
+<!-- ════ INTERACTIVE BINARY SEARCH TRACER ════ -->
+<div class="topic-card">
+  <span class="section-label">Interactive Simulation</span>
+  <h2>🎮 Interactive Binary Search Step Tracer</h2>
+  <p>Step through binary search on <code>[2, 5, 8, 12, 16, 23, 38, 56, 72, 91]</code> in real-time!</p>
+  <div id="bs-tracer"></div>
+</div>
+
+<!-- ════ STEP-BY-STEP TRACE TABLES ════ -->
+<div class="topic-card">
+  <span class="section-label">Detailed Execution Trace</span>
+  <h2>🔍 Step-by-Step Algorithm Execution Trace</h2>
+
+  <h3>Binary Search Trace: Target = 23</h3>
+  <p>Searching for <code>target = 23</code> in <code>arr = [2, 5, 8, 12, 16, 23, 38, 56, 72, 91]</code> (10 items, indexes 0..9):</p>
+
+  <div class="table-wrap"><table>
+    <thead><tr><th>Step</th><th>Low</th><th>High</th><th>Mid Formula</th><th>Mid Index</th><th>arr[mid]</th><th>Comparison</th><th>Action</th></tr></thead>
+    <tbody>
+      <tr><td>1</td><td>0</td><td>9</td><td>(0 + 9) // 2</td><td>4</td><td>16</td><td><code>16 < 23</code></td><td>Move low → mid + 1 (5)</td></tr>
+      <tr><td>2</td><td>5</td><td>9</td><td>(5 + 9) // 2</td><td>7</td><td>56</td><td><code>56 > 23</code></td><td>Move high → mid - 1 (6)</td></tr>
+      <tr><td>3</td><td>5</td><td>6</td><td>(5 + 6) // 2</td><td>5</td><td>23</td><td><code>23 == 23</code> ✅</td><td><strong>Target Found at Index 5!</strong></td></tr>
+    </tbody>
+  </table></div>
+
+  <h3>Sliding Window Trace: Longest Substring Without Repeats</h3>
+  <p>Tracing <code>s = "abcabcbb"</code>:</p>
+
+  <div class="table-wrap"><table>
+    <thead><tr><th>Right</th><th>Char</th><th>Window Set Before</th><th>Action</th><th>Window Set After</th><th>Left</th><th>Max Length</th></tr></thead>
+    <tbody>
+      <tr><td>0</td><td><code>'a'</code></td><td><code>{}</code></td><td>Add <code>'a'</code></td><td><code>{'a'}</code></td><td>0</td><td>1</td></tr>
+      <tr><td>1</td><td><code>'b'</code></td><td><code>{'a'}</code></td><td>Add <code>'b'</code></td><td><code>{'a', 'b'}</code></td><td>0</td><td>2</td></tr>
+      <tr><td>2</td><td><code>'c'</code></td><td><code>{'a', 'b'}</code></td><td>Add <code>'c'</code></td><td><code>{'a', 'b', 'c'}</code></td><td>0</td><td>3</td></tr>
+      <tr><td>3</td><td><code>'a'</code></td><td><code>{'a', 'b', 'c'}</code></td><td><code>'a'</code> exists! Remove <code>s[left]</code> ('a'), left++</td><td><code>{'b', 'c', 'a'}</code></td><td>1</td><td>3</td></tr>
+      <tr><td>4</td><td><code>'b'</code></td><td><code>{'b', 'c', 'a'}</code></td><td><code>'b'</code> exists! Remove <code>s[left]</code> ('b'), left++</td><td><code>{'c', 'a', 'b'}</code></td><td>2</td><td>3</td></tr>
+    </tbody>
+  </table></div>
+</div>
+
+<!-- ════ CODE IMPLEMENTATIONS ════ -->
+<div class="topic-card">
+  <span class="section-label">Code Solutions</span>
+  <h2>💻 Complete Working Solutions</h2>
+
+  <div class="code-block"><div class="code-header"><div class="code-dots"><span></span><span></span><span></span></div><span class="code-filename">binary_search.py</span><button class="code-copy">Copy</button></div>
+<pre><code><span class="kw">def</span> <span class="fn">binary_search</span>(arr: <span class="bi">list</span>, target: <span class="bi">int</span>) -> <span class="bi">int</span>:
+    <span class="fn">low</span>, <span class="fn">high</span> = <span class="nu">0</span>, <span class="bi">len</span>(arr) - <span class="nu">1</span>
+    <span class="kw">while</span> low &lt;= high:
+        <span class="fn">mid</span> = (low + high) // <span class="nu">2</span>
+        <span class="kw">if</span> arr[mid] == target:
+            <span class="kw">return</span> mid
+        <span class="kw">elif</span> arr[mid] &lt; target:
+            low = mid + <span class="nu">1</span>
+        <span class="kw">else</span>:
+            high = mid - <span class="nu">1</span>
+    <span class="kw">return</span> -<span class="nu">1</span>
+
+<span class="bi">print</span>(<span class="fn">binary_search</span>([<span class="nu">2</span>, <span class="nu">5</span>, <span class="nu">8</span>, <span class="nu">12</span>, <span class="nu">16</span>, <span class="nu">23</span>, <span class="nu">38</span>], <span class="nu">23</span>))  <span class="cm"># 5</span></code></pre></div>
+</div>
+
+<div class="page-nav">
+<a href="recursion.html"><span class="nav-label">← Previous</span><span class="nav-title">Recursion</span></a>
+<a href="sorting.html" class="next"><span class="nav-label">Next →</span><span class="nav-title">Sorting</span></a>
+</div>
+</main>
+<button id="btt" aria-label="Back to top">↑</button>
+<script src="script.js"></script>
+</body>
+</html>

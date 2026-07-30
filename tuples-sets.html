@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>Tuples & Sets — PyDSA</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="style.css"/>
+</head>
+<body>
+<nav class="navbar"><div class="nav-inner"><a href="index.html" class="nav-brand"><span class="icon">⟨/⟩</span><span>PyDSA</span></a><ul class="nav-links" id="nav-links"><li><a href="basics.html">Basics</a></li><li><a href="strings.html">Strings</a></li><li><a href="lists.html">Lists</a></li><li><a href="dictionaries.html">Dicts</a></li><li><a href="stacks-queues.html">Stacks</a></li><li><a href="linked-lists.html">LinkedList</a></li><li><a href="trees.html">Trees</a></li><li><a href="sorting.html">Sorting</a></li><li><a href="recursion.html">Recursion</a></li></ul><button class="nav-toggle" id="nav-toggle" aria-label="Menu"><span></span><span></span><span></span></button></div></nav>
+<header class="page-hero"><span class="emoji">🔒</span><h1>Tuples & Sets</h1><p>Immutable sequences and unique collections — two essential Python data structures.</p></header>
+<div class="breadcrumb"><a href="index.html">Home</a><span>›</span>Tuples & Sets</div>
+<main class="content">
+
+<div class="topic-card"><span class="section-label">Tuples</span>
+<h2>🔒 Tuples — Immutable Lists</h2>
+<p>A tuple is like a list that <strong>cannot be modified</strong> after creation. Faster than lists and can be used as dictionary keys.</p>
+<div class="code-block"><div class="code-header"><div class="code-dots"><span></span><span></span><span></span></div><span class="code-filename">tuples.py</span><button class="code-copy">Copy</button></div>
+<pre><code><span class="cm"># Creating tuples</span>
+<span class="fn">point</span> = (<span class="nu">3</span>, <span class="nu">4</span>)
+<span class="fn">rgb</span> = (<span class="nu">255</span>, <span class="nu">128</span>, <span class="nu">0</span>)
+<span class="fn">single</span> = (<span class="nu">42</span>,)          <span class="cm"># ← comma required for single element!</span>
+<span class="fn">empty</span> = ()
+<span class="fn">from_list</span> = <span class="bi">tuple</span>([<span class="nu">1</span>,<span class="nu">2</span>,<span class="nu">3</span>])
+
+<span class="cm"># Access (same as lists)</span>
+<span class="bi">print</span>(point[<span class="nu">0</span>])         <span class="cm"># 3</span>
+<span class="bi">print</span>(rgb[-<span class="nu">1</span>])          <span class="cm"># 0</span>
+<span class="bi">print</span>(rgb[<span class="nu">1</span>:])          <span class="cm"># (128, 0)</span>
+
+<span class="cm"># Unpacking — very powerful!</span>
+<span class="fn">x</span>, <span class="fn">y</span> = point             <span class="cm"># x=3, y=4</span>
+<span class="fn">r</span>, <span class="fn">g</span>, <span class="fn">b</span> = rgb            <span class="cm"># r=255, g=128, b=0</span>
+
+<span class="cm"># Extended unpacking with *</span>
+<span class="fn">first</span>, *<span class="fn">rest</span> = (<span class="nu">1</span>,<span class="nu">2</span>,<span class="nu">3</span>,<span class="nu">4</span>,<span class="nu">5</span>)
+<span class="bi">print</span>(first)  <span class="cm"># 1</span>
+<span class="bi">print</span>(rest)   <span class="cm"># [2, 3, 4, 5]</span>
+
+<span class="cm"># Swap values using tuples</span>
+<span class="fn">a</span>, <span class="fn">b</span> = <span class="nu">10</span>, <span class="nu">20</span>
+<span class="fn">a</span>, <span class="fn">b</span> = b, a              <span class="cm"># a=20, b=10</span>
+
+<span class="cm"># Tuple methods (only 2!)</span>
+<span class="fn">t</span> = (<span class="nu">1</span>,<span class="nu">2</span>,<span class="nu">3</span>,<span class="nu">2</span>,<span class="nu">1</span>)
+<span class="bi">print</span>(t.count(<span class="nu">2</span>))       <span class="cm"># 2</span>
+<span class="bi">print</span>(t.index(<span class="nu">3</span>))       <span class="cm"># 2</span>
+
+<span class="cm"># Tuples as dict keys (lists can't do this!)</span>
+<span class="fn">locations</span> = {
+    (<span class="nu">40.7</span>, -<span class="nu">74.0</span>): <span class="st">"New York"</span>,
+    (<span class="nu">51.5</span>, -<span class="nu">0.1</span>): <span class="st">"London"</span>
+}
+
+<span class="cm"># Named tuples — more readable</span>
+<span class="kw">from</span> collections <span class="kw">import</span> namedtuple
+<span class="fn">Point</span> = namedtuple(<span class="st">"Point"</span>, [<span class="st">"x"</span>, <span class="st">"y"</span>])
+<span class="fn">p</span> = Point(<span class="nu">3</span>, <span class="nu">4</span>)
+<span class="bi">print</span>(p.x, p.y)  <span class="cm"># 3 4</span></code></pre></div>
+<div class="info-box info-tip"><span class="icon">💡</span><p><strong>When to use tuples:</strong> For data that shouldn't change (coordinates, RGB colors, database records), function return values, and as dictionary keys.</p></div>
+</div>
+
+<div class="topic-card"><span class="section-label">Sets</span>
+<h2>🎯 Sets — Unique Collections</h2>
+<p>An <strong>unordered</strong> collection of <strong>unique</strong> elements with O(1) membership testing. Internally uses a hash table.</p>
+<div class="code-block"><div class="code-header"><div class="code-dots"><span></span><span></span><span></span></div><span class="code-filename">sets.py</span><button class="code-copy">Copy</button></div>
+<pre><code><span class="cm"># Creating sets</span>
+<span class="fn">colors</span> = {<span class="st">"red"</span>, <span class="st">"green"</span>, <span class="st">"blue"</span>}
+<span class="fn">nums</span> = <span class="bi">set</span>([<span class="nu">1</span>, <span class="nu">2</span>, <span class="nu">2</span>, <span class="nu">3</span>, <span class="nu">3</span>])  <span class="cm"># {1, 2, 3} — duplicates removed!</span>
+<span class="fn">empty</span> = <span class="bi">set</span>()              <span class="cm"># {} creates a dict, NOT a set!</span>
+
+<span class="cm"># Adding & Removing</span>
+colors.add(<span class="st">"yellow"</span>)        <span class="cm"># add single element</span>
+colors.update([<span class="st">"black"</span>, <span class="st">"white"</span>])  <span class="cm"># add multiple</span>
+colors.remove(<span class="st">"red"</span>)        <span class="cm"># remove (KeyError if missing)</span>
+colors.discard(<span class="st">"xyz"</span>)       <span class="cm"># remove (NO error if missing)</span>
+<span class="fn">item</span> = colors.pop()          <span class="cm"># remove & return arbitrary element</span>
+
+<span class="cm"># ─── Set Operations (very useful for DSA!) ───</span>
+<span class="fn">a</span> = {<span class="nu">1</span>, <span class="nu">2</span>, <span class="nu">3</span>, <span class="nu">4</span>}
+<span class="fn">b</span> = {<span class="nu">3</span>, <span class="nu">4</span>, <span class="nu">5</span>, <span class="nu">6</span>}
+
+<span class="bi">print</span>(a | b)     <span class="cm"># {1,2,3,4,5,6}  — Union (OR)</span>
+<span class="bi">print</span>(a & b)     <span class="cm"># {3, 4}          — Intersection (AND)</span>
+<span class="bi">print</span>(a - b)     <span class="cm"># {1, 2}          — Difference (in a, not in b)</span>
+<span class="bi">print</span>(a ^ b)     <span class="cm"># {1, 2, 5, 6}    — Symmetric Difference (XOR)</span>
+
+<span class="cm"># Subset / Superset</span>
+<span class="bi">print</span>({<span class="nu">1</span>,<span class="nu">2</span>} &lt;= {<span class="nu">1</span>,<span class="nu">2</span>,<span class="nu">3</span>})  <span class="cm"># True  — {1,2} is subset</span>
+<span class="bi">print</span>({<span class="nu">1</span>,<span class="nu">2</span>,<span class="nu">3</span>} >= {<span class="nu">1</span>,<span class="nu">2</span>})  <span class="cm"># True  — {1,2,3} is superset</span>
+
+<span class="cm"># ★ Fast membership test — O(1) vs O(n) for lists!</span>
+<span class="fn">big_set</span> = <span class="bi">set</span>(<span class="bi">range</span>(<span class="nu">1000000</span>))
+<span class="bi">print</span>(<span class="nu">999999</span> <span class="kw">in</span> big_set)  <span class="cm"># True — instant!</span>
+
+<span class="cm"># ★ DSA: Remove duplicates from list (preserving order)</span>
+<span class="fn">data</span> = [<span class="nu">3</span>,<span class="nu">1</span>,<span class="nu">4</span>,<span class="nu">1</span>,<span class="nu">5</span>,<span class="nu">9</span>,<span class="nu">2</span>,<span class="nu">6</span>,<span class="nu">5</span>]
+<span class="fn">seen</span> = <span class="bi">set</span>()
+<span class="fn">unique</span> = [x <span class="kw">for</span> x <span class="kw">in</span> data <span class="kw">if</span> <span class="kw">not</span> (x <span class="kw">in</span> seen <span class="kw">or</span> seen.add(x))]
+<span class="bi">print</span>(unique)  <span class="cm"># [3, 1, 4, 5, 9, 2, 6]</span>
+
+<span class="cm"># ★ DSA: Find common elements</span>
+<span class="fn">list1</span> = [<span class="nu">1</span>,<span class="nu">2</span>,<span class="nu">3</span>,<span class="nu">4</span>]
+<span class="fn">list2</span> = [<span class="nu">3</span>,<span class="nu">4</span>,<span class="nu">5</span>,<span class="nu">6</span>]
+<span class="fn">common</span> = <span class="bi">set</span>(list1) & <span class="bi">set</span>(list2)
+<span class="bi">print</span>(common)  <span class="cm"># {3, 4}</span>
+
+<span class="cm"># Set comprehension</span>
+<span class="fn">sq_set</span> = {x**<span class="nu">2</span> <span class="kw">for</span> x <span class="kw">in</span> <span class="bi">range</span>(<span class="nu">10</span>)}
+<span class="cm"># {0, 1, 4, 9, 16, 25, 36, 49, 64, 81}</span>
+
+<span class="cm"># frozenset — immutable set (can be dict key)</span>
+<span class="fn">fs</span> = <span class="bi">frozenset</span>([<span class="nu">1</span>,<span class="nu">2</span>,<span class="nu">3</span>])</code></pre></div>
+</div>
+
+<div class="topic-card">
+<h2>⚖️ Comparison: List vs Tuple vs Set</h2>
+<div class="table-wrap"><table>
+<thead><tr><th>Feature</th><th>List</th><th>Tuple</th><th>Set</th></tr></thead>
+<tbody>
+<tr><td>Syntax</td><td><code>[1, 2, 3]</code></td><td><code>(1, 2, 3)</code></td><td><code>{1, 2, 3}</code></td></tr>
+<tr><td>Ordered</td><td>✅</td><td>✅</td><td>❌</td></tr>
+<tr><td>Mutable</td><td>✅</td><td>❌</td><td>✅</td></tr>
+<tr><td>Duplicates</td><td>✅</td><td>✅</td><td>❌</td></tr>
+<tr><td>Indexable</td><td>✅</td><td>✅</td><td>❌</td></tr>
+<tr><td>Dict key?</td><td>❌</td><td>✅</td><td>❌</td></tr>
+<tr><td>Lookup <code>in</code></td><td><code>O(n)</code></td><td><code>O(n)</code></td><td><code>O(1)</code></td></tr>
+</tbody></table></div>
+</div>
+
+<div class="page-nav">
+<a href="lists.html"><span class="nav-label">← Previous</span><span class="nav-title">Lists</span></a>
+<a href="dictionaries.html" class="next"><span class="nav-label">Next →</span><span class="nav-title">Dictionaries</span></a>
+</div>
+</main>
+<button id="btt" aria-label="Back to top">↑</button>
+<script src="script.js"></script>
+</body>
+</html>

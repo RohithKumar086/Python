@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>Graphs — PyDSA</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="style.css"/>
+</head>
+<body>
+<nav class="navbar"><div class="nav-inner"><a href="index.html" class="nav-brand"><span class="icon">⟨/⟩</span><span>PyDSA</span></a><ul class="nav-links" id="nav-links"><li><a href="basics.html">Basics</a></li><li><a href="strings.html">Strings</a></li><li><a href="lists.html">Lists</a></li><li><a href="dictionaries.html">Dicts</a></li><li><a href="stacks-queues.html">Stacks</a></li><li><a href="linked-lists.html">LinkedList</a></li><li><a href="trees.html">Trees</a></li><li><a href="sorting.html">Sorting</a></li><li><a href="recursion.html">Recursion</a></li></ul><button class="nav-toggle" id="nav-toggle" aria-label="Menu"><span></span><span></span><span></span></button></div></nav>
+<header class="page-hero"><span class="emoji">🕸️</span><h1>Graphs</h1><p>Networks of connected nodes — adjacency lists, BFS, DFS, and traversal patterns.</p></header>
+<div class="breadcrumb"><a href="index.html">Home</a><span>›</span>Graphs</div>
+<main class="content">
+
+<div class="topic-card"><span class="section-label">Concept</span>
+<h2>🕸️ What is a Graph?</h2>
+<p>A graph consists of <strong>vertices</strong> (nodes) and <strong>edges</strong> (connections). Graphs can be <strong>directed</strong> or <strong>undirected</strong>, <strong>weighted</strong> or <strong>unweighted</strong>.</p>
+<div class="visual">
+  <div class="visual-title">Undirected Graph → Adjacency List</div>
+  <div style="display:flex;gap:40px;justify-content:center;flex-wrap:wrap">
+    <div style="text-align:left">
+      <div class="adj-row"><span class="adj-key">A</span> → <span class="adj-val">B, C</span></div>
+      <div class="adj-row"><span class="adj-key">B</span> → <span class="adj-val">A, D</span></div>
+      <div class="adj-row"><span class="adj-key">C</span> → <span class="adj-val">A, D</span></div>
+      <div class="adj-row"><span class="adj-key">D</span> → <span class="adj-val">B, C</span></div>
+    </div>
+  </div>
+</div>
+</div>
+
+<div class="topic-card"><span class="section-label">Implementation</span>
+<h2>🛠️ Graph with Adjacency List</h2>
+<div class="code-block"><div class="code-header"><div class="code-dots"><span></span><span></span><span></span></div><span class="code-filename">graph.py</span><button class="code-copy">Copy</button></div>
+<pre><code><span class="kw">from</span> collections <span class="kw">import</span> defaultdict, deque
+
+<span class="kw">class</span> <span class="fn">Graph</span>:
+    <span class="kw">def</span> <span class="fn">__init__</span>(self):
+        self.graph = defaultdict(<span class="bi">list</span>)
+
+    <span class="kw">def</span> <span class="fn">add_edge</span>(self, u, v):
+        self.graph[u].append(v)
+        self.graph[v].append(u)  <span class="cm"># remove for directed</span>
+
+    <span class="cm"># ─── BFS — Breadth First Search ───</span>
+    <span class="cm"># Uses a QUEUE → explores level by level</span>
+    <span class="kw">def</span> <span class="fn">bfs</span>(self, start):
+        <span class="fn">visited</span> = <span class="bi">set</span>([start])
+        <span class="fn">queue</span> = deque([start])
+        <span class="fn">result</span> = []
+        <span class="kw">while</span> queue:
+            <span class="fn">node</span> = queue.popleft()
+            result.append(node)
+            <span class="kw">for</span> neighbor <span class="kw">in</span> self.graph[node]:
+                <span class="kw">if</span> neighbor <span class="kw">not in</span> visited:
+                    visited.add(neighbor)
+                    queue.append(neighbor)
+        <span class="kw">return</span> result
+
+    <span class="cm"># ─── DFS — Depth First Search (Iterative) ───</span>
+    <span class="cm"># Uses a STACK → goes deep before backtracking</span>
+    <span class="kw">def</span> <span class="fn">dfs_iterative</span>(self, start):
+        <span class="fn">visited</span> = <span class="bi">set</span>()
+        <span class="fn">stack</span> = [start]
+        <span class="fn">result</span> = []
+        <span class="kw">while</span> stack:
+            <span class="fn">node</span> = stack.pop()
+            <span class="kw">if</span> node <span class="kw">not in</span> visited:
+                visited.add(node)
+                result.append(node)
+                <span class="kw">for</span> neighbor <span class="kw">in</span> self.graph[node]:
+                    <span class="kw">if</span> neighbor <span class="kw">not in</span> visited:
+                        stack.append(neighbor)
+        <span class="kw">return</span> result
+
+    <span class="cm"># ─── DFS — Recursive ───</span>
+    <span class="kw">def</span> <span class="fn">dfs_recursive</span>(self, node, visited=<span class="nu">None</span>):
+        <span class="kw">if</span> visited <span class="kw">is</span> <span class="nu">None</span>:
+            visited = <span class="bi">set</span>()
+        visited.add(node)
+        <span class="fn">result</span> = [node]
+        <span class="kw">for</span> neighbor <span class="kw">in</span> self.graph[node]:
+            <span class="kw">if</span> neighbor <span class="kw">not in</span> visited:
+                result.extend(self.dfs_recursive(neighbor, visited))
+        <span class="kw">return</span> result
+
+    <span class="cm"># ─── Has Path? ───</span>
+    <span class="kw">def</span> <span class="fn">has_path</span>(self, src, dest):
+        <span class="fn">visited</span> = <span class="bi">set</span>()
+        <span class="kw">return</span> self._dfs_path(src, dest, visited)
+
+    <span class="kw">def</span> <span class="fn">_dfs_path</span>(self, node, dest, visited):
+        <span class="kw">if</span> node == dest: <span class="kw">return</span> <span class="nu">True</span>
+        visited.add(node)
+        <span class="kw">for</span> neighbor <span class="kw">in</span> self.graph[node]:
+            <span class="kw">if</span> neighbor <span class="kw">not in</span> visited:
+                <span class="kw">if</span> self._dfs_path(neighbor, dest, visited):
+                    <span class="kw">return</span> <span class="nu">True</span>
+        <span class="kw">return</span> <span class="nu">False</span>
+
+<span class="cm"># ─── Usage ───</span>
+<span class="fn">g</span> = Graph()
+g.add_edge(<span class="st">"A"</span>, <span class="st">"B"</span>)
+g.add_edge(<span class="st">"A"</span>, <span class="st">"C"</span>)
+g.add_edge(<span class="st">"B"</span>, <span class="st">"D"</span>)
+g.add_edge(<span class="st">"C"</span>, <span class="st">"D"</span>)
+
+<span class="bi">print</span>(<span class="st">"BFS:"</span>, g.bfs(<span class="st">"A"</span>))           <span class="cm"># ['A', 'B', 'C', 'D']</span>
+<span class="bi">print</span>(<span class="st">"DFS:"</span>, g.dfs_iterative(<span class="st">"A"</span>))  <span class="cm"># ['A', 'C', 'D', 'B']</span>
+<span class="bi">print</span>(<span class="st">"Path A→D?"</span>, g.has_path(<span class="st">"A"</span>,<span class="st">"D"</span>))  <span class="cm"># True</span></code></pre></div>
+</div>
+
+<div class="topic-card">
+<h2>⚖️ BFS vs DFS</h2>
+<div class="table-wrap"><table>
+<thead><tr><th></th><th>BFS</th><th>DFS</th></tr></thead>
+<tbody>
+<tr><td>Data Structure</td><td>Queue</td><td>Stack (or recursion)</td></tr>
+<tr><td>Order</td><td>Level by level</td><td>Explores deep first</td></tr>
+<tr><td>Shortest Path?</td><td>✅ (unweighted)</td><td>❌</td></tr>
+<tr><td>Space</td><td><code>O(V)</code></td><td><code>O(V)</code></td></tr>
+<tr><td>Time</td><td><code>O(V + E)</code></td><td><code>O(V + E)</code></td></tr>
+<tr><td>Best For</td><td>Shortest path, levels</td><td>Backtracking, cycles</td></tr>
+</tbody></table></div>
+</div>
+
+<div class="page-nav">
+<a href="trees.html"><span class="nav-label">← Previous</span><span class="nav-title">Trees & BST</span></a>
+<a href="recursion.html" class="next"><span class="nav-label">Next →</span><span class="nav-title">Recursion</span></a>
+</div>
+</main>
+<button id="btt" aria-label="Back to top">↑</button>
+<script src="script.js"></script>
+</body>
+</html>

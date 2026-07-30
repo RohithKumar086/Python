@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>Stacks & Queues — PyDSA</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="style.css"/>
+</head>
+<body>
+<nav class="navbar"><div class="nav-inner"><a href="index.html" class="nav-brand"><span class="icon">⟨/⟩</span><span>PyDSA</span></a><ul class="nav-links" id="nav-links"><li><a href="basics.html">Basics</a></li><li><a href="strings.html">Strings</a></li><li><a href="lists.html">Lists</a></li><li><a href="dictionaries.html">Dicts</a></li><li><a href="stacks-queues.html" class="active">Stacks</a></li><li><a href="linked-lists.html">LinkedList</a></li><li><a href="trees.html">Trees</a></li><li><a href="sorting.html">Sorting</a></li><li><a href="recursion.html">Recursion</a></li></ul><button class="nav-toggle" id="nav-toggle" aria-label="Menu"><span></span><span></span><span></span></button></div></nav>
+<header class="page-hero"><span class="emoji">📚</span><h1>Stacks & Queues</h1><p>LIFO and FIFO data structures — interactive simulator, step-by-step traces, and interview patterns.</p></header>
+<div class="breadcrumb"><a href="index.html">Home</a><span>›</span>Stacks & Queues</div>
+<main class="content">
+
+<!-- ════ WHEN TO USE & QUESTIONS SOLVED ════ -->
+<div class="topic-card" style="border-left:4px solid var(--accent)">
+  <span class="section-label">Interview Applications</span>
+  <h2>🎯 What Problems Are Solved Using Stacks & Queues?</h2>
+  
+  <div class="table-wrap"><table>
+    <thead><tr><th>Pattern</th><th>Key Indicator</th><th>Top LeetCode / Interview Questions</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Matching Pairs / Nested Structures</strong></td><td>Parentheses, HTML tags, expression evaluation</td><td>Valid Parentheses (#20), Evaluate Reverse Polish Notation (#150)</td></tr>
+      <tr><td><strong>Monotonic Stack</strong></td><td>"Next Greater Element", "Daily Temperatures", histogram area</td><td>Daily Temperatures (#739), Next Greater Element I (#496), Largest Rectangle (#84)</td></tr>
+      <tr><td><strong>Level Order Traversal / BFS</strong></td><td>Tree level-by-level, shortest path in grid</td><td>Binary Tree Level Order (#102), Rotting Oranges (#994)</td></tr>
+      <tr><td><strong>Sliding Window Maximum</strong></td><td>Monotonic Deque</td><td>Sliding Window Maximum (#239)</td></tr>
+    </tbody>
+  </table></div>
+</div>
+
+<!-- ════ INTERACTIVE STACK SIMULATOR ════ -->
+<div class="topic-card">
+  <span class="section-label">Interactive Simulation</span>
+  <h2>🎮 Interactive Stack Simulator</h2>
+  <p>Push and Pop values in real-time to watch the LIFO stack behavior!</p>
+  <div id="stack-sim"></div>
+</div>
+
+<!-- ════ STEP-BY-STEP TRACE TABLES ════ -->
+<div class="topic-card">
+  <span class="section-label">Detailed Execution Trace</span>
+  <h2>🔍 Step-by-Step Algorithm Execution Trace</h2>
+
+  <h3>Trace: Valid Parentheses for <code>s = "{[]}"</code></h3>
+  
+  <div class="table-wrap"><table>
+    <thead><tr><th>Step</th><th>Current Char</th><th>Char Type</th><th>Stack Before Step</th><th>Action Taken</th><th>Stack After Step</th></tr></thead>
+    <tbody>
+      <tr><td>1</td><td><code>'{'</code></td><td>Opening bracket</td><td><code>[]</code></td><td>Push <code>'{'</code></td><td><code>['{']</code></td></tr>
+      <tr><td>2</td><td><code>'['</code></td><td>Opening bracket</td><td><code>['{']</code></td><td>Push <code>'['</code></td><td><code>['{', '[']</code></td></tr>
+      <tr><td>3</td><td><code>']'</code></td><td>Closing bracket</td><td><code>['{', '[']</code></td><td>Pop top (<code>'['</code>) → matches <code>']'</code> ✅</td><td><code>['{']</code></td></tr>
+      <tr><td>4</td><td><code>'}'</code></td><td>Closing bracket</td><td><code>['{']</code></td><td>Pop top (<code>'{'</code>) → matches <code>'}'</code> ✅</td><td><code>[]</code></td></tr>
+      <tr><td>Final</td><td>End of string</td><td>Result</td><td><code>[]</code></td><td>Stack is empty → <strong>Return True</strong></td><td><code>[]</code></td></tr>
+    </tbody>
+  </table></div>
+</div>
+
+<!-- ════ CODE IMPLEMENTATIONS ════ -->
+<div class="topic-card">
+  <span class="section-label">Code Solutions</span>
+  <h2>💻 Complete Working Solutions</h2>
+
+  <h3>1. Valid Parentheses</h3>
+  <div class="code-block"><div class="code-header"><div class="code-dots"><span></span><span></span><span></span></div><span class="code-filename">valid_parentheses.py</span><button class="code-copy">Copy</button></div>
+<pre><code><span class="kw">def</span> <span class="fn">is_valid</span>(s: <span class="bi">str</span>) -> <span class="bi">bool</span>:
+    <span class="fn">stack</span> = []
+    <span class="fn">mapping</span> = {<span class="st">")"</span>: <span class="st">"("</span>, <span class="st">"}"</span>: <span class="st">"{"</span>, <span class="st">"]"</span>: <span class="st">"["</span>}
+    <span class="kw">for</span> char <span class="kw">in</span> s:
+        <span class="kw">if</span> char <span class="kw">in</span> mapping:
+            <span class="fn">top</span> = stack.pop() <span class="kw">if</span> stack <span class="kw">else</span> <span class="st">'#'</span>
+            <span class="kw">if</span> mapping[char] != top:
+                <span class="kw">return</span> <span class="nu">False</span>
+        <span class="kw">else</span>:
+            stack.append(char)
+    <span class="kw">return</span> <span class="kw">not</span> stack
+
+<span class="bi">print</span>(<span class="fn">is_valid</span>(<span class="st">"{[]}"</span>))  <span class="cm"># True</span></code></pre></div>
+</div>
+
+<div class="page-nav">
+<a href="dictionaries.html"><span class="nav-label">← Previous</span><span class="nav-title">Dictionaries</span></a>
+<a href="linked-lists.html" class="next"><span class="nav-label">Next →</span><span class="nav-title">Linked Lists</span></a>
+</div>
+</main>
+<button id="btt" aria-label="Back to top">↑</button>
+<script src="script.js"></script>
+</body>
+</html>
